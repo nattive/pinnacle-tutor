@@ -8,11 +8,15 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import { Provider } from 'react-redux';
+import store from './constants/store';
 function App() {
   return (
-    <Router>
-     <SideNav /> 
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <SideNav />
+      </Router>
+    </Provider>
   );
 }
 

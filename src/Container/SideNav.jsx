@@ -16,6 +16,8 @@ import {
 } from "react-router-dom"; 
 import { primaryBlueDefault } from '../constants/colours'
 import Course from '../Pages/Course';
+import ResponsiveContainer from './ResponsiveContainer';
+import { Divider } from '@material-ui/core';
 const navWidthCollapsed = 64;
 const navWidthExpanded = 280;
 
@@ -132,23 +134,28 @@ export default class extends PureComponent {
                             <NavHeader expanded={expanded}>
                                 {/* <NavTitle>Tutor Name</NavTitle> */}
                             </NavHeader>
+                            <Divider />
                             <SideNav.Nav defaultSelected="home">
                                 {
                                     NavList.map(nav =>
-                                        <NavItem eventKey={nav.link} key={nav.name}>
+                                    <React.Fragment key={nav.name}>
+                                        <NavItem eventKey={nav.link}>
                                             <NavIcon>
-                                                <i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
+                                                <nav.icon />
                                             </NavIcon>
                                             <NavText style={{ paddingRight: 32, textTransform: 'uppercase' }} title="HOME">
                                                 {nav.name}
                                             </NavText>
                                         </NavItem>
+                                        <Divider color='secondary' />
+                                        </React.Fragment>
                                     )
                                 }
                             </SideNav.Nav>
                         </SideNav>
                         <Main expanded={expanded}>
                             <main>
+                            <ResponsiveContainer />
                                 {/* <Route path="/" exact component={props => <RootComponent />} /> */}
                                 <Route path="/dashboard" component={props =>'dashboard'} />
                                 <Route path="/courses" component={props => <Course {...props} />} />

@@ -8,7 +8,10 @@ import {
 import Course from './Course'
 export default function MainPage() {
     return (
+        <>
         <Router>
+            <ResponsiveContainer />
+
             <Switch>
                 <Route exact path="/">
                     <p>Home</p>
@@ -25,5 +28,6 @@ export default function MainPage() {
                 
             </Switch>
         </Router>
+        </>
     )
 }
