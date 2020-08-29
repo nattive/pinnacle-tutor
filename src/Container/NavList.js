@@ -13,6 +13,11 @@ export const NavList = [{
         icon: VideoLibraryIcon,
     },
     {
+        name: 'Uploaded Courses',
+        link: 'uploaded/courses',
+        icon: LibraryBooksIcon,
+    },
+    {
         name: 'Course Tools',
         link: 'course/tool',
         icon: ImportantDevicesIcon,

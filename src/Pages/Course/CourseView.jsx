@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -7,15 +7,17 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { Select as MaterialSelect, FormHelperText } from '@material-ui/core';
+import { Select as MaterialSelect, FormHelperText, Input as MaterialInput, CircularProgress } from '@material-ui/core';
 import 'react-dropzone-uploader/dist/styles.css'
-import Dropzone from 'react-dropzone-uploader'
+// import Dropzone from 'react-dropzone-uploader'
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import { useDropzone } from 'react-dropzone'
+
 import {
     Icon, Container, Grid,
     Checkbox,
@@ -24,11 +26,12 @@ import {
     Radio,
     Select,
     TextArea,
-    Header
+    Header,
+    Label
 } from 'semantic-ui-react'
 import { Divider, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { useDispatch, connect, useSelector } from 'react-redux';
-import { uploadCourse, getAllMainCategories } from '../../actions/courseAction';
+import { uploadCourse, getAllMainCategories, updateCourse } from '../../actions/courseAction';
 import {
     SET_TITLE,
     SET_SUB_CATEGORY_ID,
@@ -42,7 +45,12 @@ import {
     SET_OBJECTIVE,
     SET_DIFFICULTY,
     SET_DESCRIPTION,
+    SET_BANNER_THUMBNAIL,
 } from '../../actions/types';
+import { baseUrl } from '../../constants/baseUrl';
+import Dropzone from 'react-dropzone';
+import Axios from 'axios';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -89,6 +97,7 @@ const CreateStep = () => {
     const allMainCategories = useSelector(state => state.course.allMainCategories)
     const loadSubCategory = useSelector(state => state.course.loadSubCategory)
     const course_difficulty = useSelector(state => state.courseField.course_difficulty)
+    const hasError = useSelector(state => state.courseField.hasError)
     const [mainCat, setMainCat] = useState()
     const [subCat, setSubCat] = useState()
     const options = [
@@ -199,8 +208,9 @@ const CreateStep = () => {
                         value={subCat}
                         onChange={e => {
                             setSubCat(e.target.value && e.target.value.name)
+                            dispatch({ type: SET_SUB_CATEGORY_ID, payload: e.target.value })
                         }}
-                        label="Main Category"
+                        label="Course Category"
                     >
                         <MenuItem disabled value="null">
                             <em>-- select main category --</em>
@@ -222,6 +232,7 @@ const CreateStep = () => {
                                 fluid
                                 size='large'
                                 type={input.type}
+                                error={hasError && input.name === '' && input.error}
                                 width={5}
                                 checked={input.type === 'checkbox' && input.name}
                                 value={input.name}
@@ -236,74 +247,100 @@ const CreateStep = () => {
                     ))
                 }
             </Form.Group>
-            <Form.Group >
-                {
-                    stepOneMini.map(input => (
-                        <>
-                            <Form.Field
-                                required
-                                // fluid
-                                size='large'
-                                type={input.type}
-                                // width={5}
-                                checked={input.type === 'checkbox' && input.name}
-                                value={input.name}
-                                options={input.options}
-                                control={input.control}
-                                onChange={input.onChange}
-                                style={{ margin: 5 }}
-                                label={input.label}
-                                placeholder={input.placeholder}
-                            />
-                        </>
-                    ))
-                }
-            </Form.Group>
+            <Form >
+                <Form.Group >
+                    {
+                        stepOneMini.map(input => (
+                            <>
+                                <Form.Field
+                                    required
+                                    id='form-input-control-error-email'
+                                    size='large'
+                                    type={input.type}
+                                    // width={5}
+                                    checked={input.type === 'checkbox' && input.name}
+                                    value={input.name}
+                                    options={input.options}
+                                    control={input.control}
+                                    onChange={input.onChange}
+                                    style={{ margin: 5 }}
+                                    label={input.label}
+                                    placeholder={input.placeholder}
+                                />
+                            </>
+                        ))
+                    }
+                </Form.Group>
+            </Form>
         </Grid.Row>
     )
 }
 
 const StepTwo = () => {
-    const [video, setVideo] = useState()
     const [sub_category_id, setSubCategoryId] = useState()
     const [banner, setBanner] = useState()
+    const [video, setVideo] = useState()
     const [description, setDescription] = useState()
     const [tutor_id, setTutor_id] = useState()
     const dispatch = useDispatch()
 
+    
     // specify upload params and url for your files
-    const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
 
-    // called every time a file's `status` changes
-    const handleChangeStatus = ({ meta, file }, status) => { console.log(status, meta, file) }
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            '& > *': {
+                margin: theme.spacing(1),
+            },
+        },
+        input: {
+            display: 'none',
+        },
+    }));
+    const classes = useStyles();
 
-    // receives array of files that are done uploading when submit button is clicked
-    const handleSubmit = (files) => { console.log(files.map(f => f.meta)) }
+    const createImage = (file) => {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            dispatch({ type: SET_BANNER, payload: e.target.result })
+            // this.setState({
+            //     image: e.target.result
+            // })
+            console.log(e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    }
+    const handleUploadVideo = window.cloudinary.createUploadWidget({
+        cloudName: 'charisbiz-africa',
+        upload_preset: 'qtwirqod',
+    }, (error, result) => {
+        if (result.event == "success") {
+            dispatch({ type: SET_BANNER, payload: result.info.url })
+            // dispatch({ type: SET_BANNER_THUMBNAIL, payload: result.info.url })
+            console.log(result.info) // result.info contains data from upload
+        }
+    })
+
+    const handleUpload = window.cloudinary.createUploadWidget({
+        cloudName: 'charisbiz-africa',
+        upload_preset: 'qtwirqod',
+    }, (error, result) => {
+        if (result.event == "success") {
+            dispatch({ type: SET_VIDEO_URL, payload: result.info.url })
+            console.log(result.info) // result.info contains data from upload
+        }
+    })
+
     return (
         <Grid.Row style={{ width: '90%', padding: 10 }}>
             <Typography variant='h4' color='primary' style={{ margin: 5 }}> Upload media files for your course</Typography>
             <Divider style={{ margin: 10 }} />
-            <Dropzone
-                getUploadParams={getUploadParams}
-                onChangeStatus={({ meta, file }, status) => { dispatch({ type: SET_BANNER, payload: file }) }}
-                onSubmit={handleSubmit}
-                accept="image/*"
-                maxFiles={1}
-                autoUpload={false}
-                multiple={false}
-                inputContent={(files, extra) => (extra.reject ? 'Image files only' : 'Upload course banner image')}
-            />
-            <Divider style={{ margin: 10 }} />
-            <Dropzone
-                getUploadParams={getUploadParams}
-                onChangeStatus={handleChangeStatus}
-                onSubmit={handleSubmit}
-                accept="video/*"
-                maxFiles={1}
-                autoUpload={false}
-                multiple={false}
-                inputContent={(files, extra) => (extra.reject ? 'video files only' : 'Upload Introductory video for the course')}
-            />
+            {/* handleUpload */}
+            <Button variant="contained" style={{ margin: 10 }} onClick={() => handleUpload.open()} color="primary" >
+                Course banner Upload  </Button>
+            <Button variant="contained" style={{ margin: 10 }} onClick={() => handleUploadVideo.open()} color="primary" >
+                Video Upload  </Button>
         </Grid.Row>
     )
 }
@@ -369,7 +406,8 @@ function getStepContent(step) {
             return <StepThree />;
         case 3:
             return <StepFour />;
-
+        case 4:
+            return <p>All course upload successfull</p>
         default:
             return 'Unknown step';
     }
@@ -379,17 +417,34 @@ function CourseView(props) {
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
     const classes = useStyles();
+    const { title,
+        videoUrl,
+        sub_category_id,
+        banner } = props
     useEffect(() => {
         props.getAllMainCategories()
     }, [])
     useEffect(() => {
-        // if (props.uploadedCourse !== {}) {
-        //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        // }
+        if (props.uploadedCourse && props.uploadedCourse.id) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
 
     }, [props.uploadedCourse])
+    // useEffect(() => {
+    //     if (props.updateSuccess) {
+    //         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    //     }
+
+    // }, [props.updateSuccess])
+
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleUploadCourse = () => {
+        props.uploadCourse()
+        // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
     };
 
     const handleBack = () => {
@@ -420,14 +475,14 @@ function CourseView(props) {
                                     {activeStep === 0 ? <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={props.uploadCourse}
+                                        onClick={handleUploadCourse}
                                         className={classes.button}
                                     >
-                                        {'Next'}
+                                        {props.uploadingCourse ? <CircularProgress size={22} /> : 'Next'}
                                     </Button> : <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={activeStep === steps.length - 1 ? props.uploadCourse : handleNext}
+                                        onClick={activeStep === steps.length - 1 ? props.updateCourse : handleNext}
                                         className={classes.button}
                                     >
                                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
@@ -466,12 +521,15 @@ const mapStateToProps = (state) => ({
     course_difficulty: state.courseField.course_difficulty,
     description: state.courseField.description,
     uploadedCourse: state.courseField.uploadedCourse,
+    uploadingCourse: state.course.uploadingCourse,
+    uploadingError: state.course.uploadingError,
     allMainCategories: state.course.allMainCategories,
+    updateSuccess: state.course.updateSuccess,
     loadSubCategory: state.course.loadSubCategory,
 })
 
 const mapDispatchToProps = {
-    uploadCourse, getAllMainCategories
+    uploadCourse, getAllMainCategories, updateCourse
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseView)

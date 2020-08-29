@@ -6,18 +6,23 @@ import {
     SET_IS_CAREER,
     SET_IS_FREE,
     SET_PRICE,
+    SET_BANNER_THUMBNAIL,
     SET_OBJECTIVE,
     SET_DIFFICULTY,
     SET_DESCRIPTION,
     SET_TITLE,
-    COURSE_UPLOADED
+    COURSE_UPLOADED,
+    COURSE_FIELD_HAS_ERROR,
+    ERR_UPLOADING_COURSE,
+    UPLOAD_COURSE
 } from "../actions/types";
 
 const initialState = {
     title: '',
     videoUrl: '',
     sub_category_id: '',
-    banner: '',
+    banner_thumbnail: '',
+    banner: [],
     isPO: false,
     isCareer: false,
     isFree: false,
@@ -26,7 +31,9 @@ const initialState = {
     tutor_id: '',
     course_difficulty: '',
     description: '',
-    uploadedCourse: {}
+    uploadedCourse: {},
+    hasError: false,
+    uploadingCourse: false,
 }
 
 export default function(state = initialState, action) {
@@ -45,7 +52,7 @@ export default function(state = initialState, action) {
         case SET_BANNER:
             return {
                 ...state,
-                banner: action.payload
+                banner: state.banner.concat(action.payload)
             }
 
 
@@ -112,12 +119,31 @@ export default function(state = initialState, action) {
             }
 
 
+        case COURSE_FIELD_HAS_ERROR:
+            return {
+                ...state,
+                hasError: action.payload
+            }
+
+        case ERR_UPLOADING_COURSE:
+            return {
+                ...state,
+                updateSuccess: action.payload,
+                uploadingCourse: false
+            }
+
         case COURSE_UPLOADED:
             return {
                 ...state,
-                uploadedCourse: action.payload
+                uploadedCourse: action.payload,
+                uploadingCourse: false
             }
-
+        case UPLOAD_COURSE:
+            return {
+                ...state,
+                uploadedCourse: {},
+                uploadingCourse: true
+            }
 
         default:
             return {
