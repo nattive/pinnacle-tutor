@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import CourseView from '../CourseView'
-import { Switch, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import AddModuleHeader from './AddModuleHeader'
+import Create from './Create'
+import AddQuestion from '../../Modules/AddQuestion';
 
 const Modules = () => {
+    const { path, url } = useRouteMatch()
     return (
         <div>
             <Switch>
-                <BrowserRouter exact path={path}>
+                <Route exact path={path}>
                     <AddModuleHeader />
-                </BrowserRouter>
-                <BrowserRouter path={`${path}/modules/:slug`}>
-                    {/* <Topic /> */}
-                </BrowserRouter>
+                </Route>
+                <Route exact path={path} render={(props) => <Create {...props} />} />
+                <Route exact path={path + '/create'} render={(props) => <Create {...props} />} />
+                <Route exact path={path + '/quiz/:module'} render={(props) => <AddQuestion {...props} />} />
             </Switch>
         </div>
     )

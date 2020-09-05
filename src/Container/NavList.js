@@ -4,27 +4,33 @@ import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 export const NavList = [{
         name: 'Dashboard',
-        link: 'dashboard',
+        link: '/dashboard',
         icon: DashboardIcon,
     },
     {
         name: 'Courses',
-        link: 'courses',
+        link: '/courses',
         icon: VideoLibraryIcon,
-    },
-    {
-        name: 'Uploaded Courses',
-        link: 'uploaded/courses',
-        icon: LibraryBooksIcon,
-    },
-    {
-        name: 'Course Tools',
-        link: 'course/tool',
-        icon: ImportantDevicesIcon,
+        subMenu: [{
+                name: 'Manage Courses',
+                link: '/myCourses',
+                icon: LibraryBooksIcon,
+            },
+            {
+                name: 'Course Tools',
+                link: '/course/tool',
+                icon: ImportantDevicesIcon,
+            },
+            {
+                name: 'Upload Course',
+                link: '/courses',
+                icon: VideoLibraryIcon,
+            },
+        ]
     },
     {
         name: 'Resource',
-        link: 'resource',
+        link: '/resource',
         icon: LibraryBooksIcon,
     },
 

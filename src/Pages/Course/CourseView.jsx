@@ -172,10 +172,10 @@ const CreateStep = () => {
     const classes = useStyles();
 
     return (
-        <Grid.Row style={{ width: '90%', paddingTop: '10px' }}>
-            <Typography variant='h4' color='primary' style={{ margin: 5 }}>Basic information about the course</Typography>
+        <Container >
+            <Typography variant='h4' color='primary' >Basic information about the course</Typography>
             <Divider style={{ margin: 2 }} />
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div >
                 <FormControl fullWidth variant="outlined" className={classes.formControl}>
                     <InputLabel id="demo-simple-select-outlined-label">Main Category</InputLabel>
                     <MaterialSelect
@@ -222,7 +222,7 @@ const CreateStep = () => {
                         }
                     </MaterialSelect>
                 </FormControl>
-            </div>
+            </div><br />
             <Form.Group >
                 {
                     stepOne.map(input => (
@@ -248,7 +248,7 @@ const CreateStep = () => {
                 }
             </Form.Group>
             <Form >
-                <Form.Group >
+                <Form >
                     {
                         stepOneMini.map(input => (
                             <>
@@ -270,9 +270,9 @@ const CreateStep = () => {
                             </>
                         ))
                     }
-                </Form.Group>
+                </Form>
             </Form>
-        </Grid.Row>
+        </Container>
     )
 }
 
@@ -284,7 +284,7 @@ const StepTwo = () => {
     const [tutor_id, setTutor_id] = useState()
     const dispatch = useDispatch()
 
-    
+
     // specify upload params and url for your files
 
     const useStyles = makeStyles((theme) => ({
@@ -298,22 +298,25 @@ const StepTwo = () => {
         },
     }));
     const classes = useStyles();
-
-    const createImage = (file) => {
-        let reader = new FileReader();
-        reader.onload = (e) => {
-            dispatch({ type: SET_BANNER, payload: e.target.result })
-            // this.setState({
-            //     image: e.target.result
-            // })
-            console.log(e.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    }
     const handleUploadVideo = window.cloudinary.createUploadWidget({
         cloudName: 'charisbiz-africa',
         upload_preset: 'qtwirqod',
+        multiple: false,
+        autoMinimize: true,
+        themes: 'minimal',
+        clientAllowedFormats: ["mp4", "avi", "mpeg"],
+        text: {
+            "en": {
+                "local": {
+                    browse: "Upload Video",
+                    main_title: "Upload Video",
+                    dd_title_single: "Drag and Drop a video file here",
+                    dd_title_multi: "Drag and Drop a video file here",
+                    drop_title_single: "Drag and Drop a video file here",
+                    drop_title_multiple: "Drag and Drop a video file here"
+                },
+            }
+        }
     }, (error, result) => {
         if (result.event == "success") {
             dispatch({ type: SET_BANNER, payload: result.info.url })
@@ -325,6 +328,22 @@ const StepTwo = () => {
     const handleUpload = window.cloudinary.createUploadWidget({
         cloudName: 'charisbiz-africa',
         upload_preset: 'qtwirqod',
+        multiple: false,
+        autoMinimize: true,
+        themes: 'minimal',
+        clientAllowedFormats: ["jpg", "jpeg", "png"],
+        text: {
+            "en": {
+                "local": {
+                    browse: "Upload image",
+                    main_title: "Upload Image Banner",
+                    dd_title_single: "Drag and Drop a Image file here",
+                    dd_title_multi: "Drag and Drop a Image file here",
+                    drop_title_single: "Drag and Drop a Image file here",
+                    drop_title_multiple: "Drag and Drop a Image file here"
+                },
+            }
+        }
     }, (error, result) => {
         if (result.event == "success") {
             dispatch({ type: SET_VIDEO_URL, payload: result.info.url })
@@ -333,7 +352,7 @@ const StepTwo = () => {
     })
 
     return (
-        <Grid.Row style={{ width: '90%', padding: 10 }}>
+        <Grid.Row >
             <Typography variant='h4' color='primary' style={{ margin: 5 }}> Upload media files for your course</Typography>
             <Divider style={{ margin: 10 }} />
             {/* handleUpload */}
@@ -352,7 +371,7 @@ const StepThree = () => {
     // SET_DESCRIPTION
     return (
         <Container>
-            <div style={{ margin: '10px' }}>
+            <div >
                 <Typography variant='h6'>Course Objective</Typography>
                 <Typography variant='subtitle2'>Write in Detail the aim of this course</Typography>
                 <Editor
@@ -407,7 +426,7 @@ function getStepContent(step) {
         case 3:
             return <StepFour />;
         case 4:
-            return <p>All course upload successfull</p>
+            return <p>All course upload successfully</p>
         default:
             return 'Unknown step';
     }
@@ -442,8 +461,8 @@ function CourseView(props) {
     };
 
     const handleUploadCourse = () => {
-        props.uploadCourse()
-        // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        // props.uploadCourse()
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
     };
 

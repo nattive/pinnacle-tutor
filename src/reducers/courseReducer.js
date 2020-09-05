@@ -10,7 +10,20 @@ import {
     COURSE_UPLOADED,
     GET_ALL_COURSES,
     ALL_COURSES,
+    GET_COURSE,
+    ERR_GETTING_COURSE,
+    COURSE,
     ERR_GETTING_ALL_COURSES,
+    CREATE_MODULE_HEADER,
+    MODULE_HEADER,
+    ERR_CREATING_MODULE_HEADER,
+    ADD_QUIZ,
+    QUIZ_ADDED,
+    ERR_ADDING_QUIZ,
+    SHOW_COURSE_EDIT_PANEL,
+    UPDATE_MODULE_HEADER,
+    ERR_UPDATING_MODULE_HEADER,
+    MODULE_UPDATED,
 } from '../actions/types'
 
 
@@ -25,11 +38,25 @@ const initialState = {
     updateSuccess: null,
     updateError: null,
     uploadingCourse: false,
-    uploadingError: null
-
+    uploadingError: null,
+    course: {},
+    isGettingCourse: false,
+    errorGettingCourse: null,
+    hasCreatedModule: null,
+    isCreating: false,
+    hasModuleHeader: null,
+    errModuleHeader: null,
+    errorGettingModule: null,
+    isAddingQuiz: false,
+    quizAdded: '',
+    errorAddingQuiz: null,
+    showUpdatePanel: false,
+    isUpdatingHeader: false,
+    errUpdatingHeader: null,
+    headerHasUpdated: null,
 }
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
     switch (action.type) {
         /**
          * Borrowed
@@ -38,7 +65,6 @@ export default function (state = initialState, action) {
         case GET_ALL_MAIN_CATEGORY:
             return {
                 ...state,
-                allMainCategories: [],
                 fetchingMainCategories: true,
                 errorFetchingMainCat: null
             }
@@ -78,21 +104,116 @@ export default function (state = initialState, action) {
         case GET_ALL_COURSES:
             return {
                 ...state,
-                allCategories: [],
-                isGettingCourses: false,
+                isGettingCourses: true,
                 fetchCoursesError: null,
             }
 
         case ALL_COURSES:
             return {
                 ...state,
+                isGettingCourses: false,
                 allCategories: action.payload,
             }
 
         case ERR_GETTING_ALL_COURSES:
             return {
                 ...state,
+                isGettingCourses: false,
                 fetchCoursesError: action.payload
+            }
+
+        case GET_COURSE:
+            return {
+                ...state,
+                course: {},
+                isGettingCourse: true,
+                errorGettingCourse: null
+            }
+
+        case ERR_GETTING_COURSE:
+            return {
+                ...state,
+                errorGettingCourse: action.payload,
+                isGettingCourse: false,
+
+            }
+
+        case COURSE:
+            return {
+                ...state,
+                course: action.payload,
+                isGettingCourse: false,
+            }
+
+        case CREATE_MODULE_HEADER:
+            return {
+                ...state,
+                hasCreatedModule: null,
+                isCreating: true,
+                errorGettingModule: null
+            }
+
+        case MODULE_HEADER:
+            return {
+                ...state,
+                hasModuleHeader: action.payload,
+                isCreating: false,
+            }
+
+
+        case ERR_CREATING_MODULE_HEADER:
+            return {
+                ...state,
+                errModuleHeader: action.payload,
+                isCreating: false,
+            }
+
+        case ADD_QUIZ:
+            return {
+                ...state,
+                isAddingQuiz: true,
+                quizAdded: '',
+                errorAddingQuiz: null,
+            }
+
+        case QUIZ_ADDED:
+            return {
+                ...state,
+                isAddingQuiz: false,
+                quizAdded: true,
+            }
+
+        case ERR_ADDING_QUIZ:
+            return {
+                ...state,
+                errorAddingQuiz: action.payload,
+                isAddingQuiz: false,
+            }
+
+        case SHOW_COURSE_EDIT_PANEL:
+            return {
+                ...state,
+                showUpdatePanel: action.payload,
+            }
+
+        case UPDATE_MODULE_HEADER:
+            return {
+                ...state,
+                isUpdatingHeader: true,
+                errUpdatingHeader: null,
+            }
+        case MODULE_UPDATED:
+            return {
+                ...state,
+                headerHasUpdated: action.payload,
+                isUpdatingHeader: false,
+            }
+
+        case ERR_UPDATING_MODULE_HEADER:
+            return {
+                ...state,
+                isUpdatingHeader: false,
+                errUpdatingHeader: action.payload,
             }
 
         default:

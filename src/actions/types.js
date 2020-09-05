@@ -37,7 +37,11 @@ export const UPLOAD_COURSE_VIDEO = 'UPLOAD_COURSE_VIDEO'
 export const ERR_UPLOADING_COURSE_VIDEO = 'ERR_UPLOADING_COURSE_VIDEO'
 export const HAS_UPLOAD_VIDEO = 'HAS_UPLOAD_VIDEO'
 
-/************************************************/
+export const GET_COURSE = 'GET_COURSE'
+export const ERR_GETTING_COURSE = 'ERR_GETTING_COURSE'
+export const COURSE = 'COURSE'
+
+/******************************************************/
 
 export const GET_ALL_MAIN_CATEGORY = 'GET_ALL_MAIN_CATEGORY'
 export const MAIN_CATEGORIES = 'MAIN_CATEGORIES'
@@ -47,4 +51,69 @@ export const ERR_MAIN_CATEGORIES = 'ERR_MAIN_CATEGORIES'
 
 export const LOAD_SUB_CAT = 'LOAD_SUB_CAT'
 
+/************************************************
+ *
+ * COURSES MODULES CONSTANTS
+ *
+ * ************************************************/
+
+export const CREATE_MODULE_HEADER = 'CREATE_MODULE_HEADER'
+export const MODULE_HEADER = 'MODULE_HEADER'
+export const ERR_CREATING_MODULE_HEADER = 'ERR_CREATING_MODULE_HEADER'
+
+export const SHOW_COURSE_EDIT_PANEL = 'SHOW_COURSE_EDIT_PANEL'
+
+export const UPDATE_MODULE_HEADER = 'UPDATE_MODULE_HEADER'
+export const ERR_UPDATING_MODULE_HEADER = 'ERR_UPDATING_MODULE_HEADER'
+export const MODULE_UPDATED = 'MODULE_UPDATED'
+
 /************************************************/
+
+export const ADD_QUIZ = 'ADD_QUIZ'
+export const QUIZ_ADDED = 'QUIZ_ADDED'
+export const ERR_ADDING_QUIZ = 'ERR_ADDING_QUIZ'
+
+/************************************************/
+
+export const SET_MODULE_BANNER = 'SET_MODULE_BANNER'
+export const SET_MODULE_VIDEO = 'SET_MODULE_VIDEO'
+export const SET_MODULE_PREREQUISITE = 'SET_MODULE_PREREQUISITE'
+export const SET_MODULE_TITLE = 'SET_MODULE_TITLE'
+export const SET_COURSE_MODULE_ID = 'SET_COURSE_MODULE_ID'
+export const SET_MODULE_TEXT = 'SET_MODULE_TEXT'
+export const SET_MODULE_OBJECTIVE = 'SET_MODULE_OBJECTIVE'
+
+
+/************************************************
+ *
+ * GENERAL CONSTANTS
+ *
+ * ************************************************/
+
+export const EXPAND_NAV = 'EXPAND_NAV'
+
+/************************************************
+ *
+ * LOADER
+ *
+ * ************************************************/
+export const APP_LOADER = 'APP_LOADER'
+export const APP_STOPPED_LOADING = 'APP_STOPPED_LOADING'
+
+/************************************************
+ *
+ * AUTH
+ * 
+ * ************************************************/
+
+export const IS_LOGGING = 'IS_LOGGING'
+export const ERROR_LOGGING_IN = 'ERROR_LOGGING_IN'
+export const LOGGED_IN = 'LOGGED_IN'
+export const USER = 'USER'
+
+
+export const HAS_ERRORS = 'HAS_ERRORS'
+
+export const IS_REGISTERING = 'IS_REGISTERING'
+export const ERROR_REGISTERING_IN = 'ERROR_REGISTERING_IN'
+export const REGISTERED = 'REGISTERED'

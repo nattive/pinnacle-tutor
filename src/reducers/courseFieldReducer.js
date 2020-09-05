@@ -34,6 +34,16 @@ const initialState = {
     uploadedCourse: {},
     hasError: false,
     uploadingCourse: false,
+    // 
+    title: '',
+    course_module_id: '',
+    stepInModule: '',
+    text: '',
+    quiz: '',
+    objective: '',
+    prerequisite: '',
+    videoPath: '',
+    images: '',
 }
 
 export default function(state = initialState, action) {
