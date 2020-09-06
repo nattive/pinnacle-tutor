@@ -7,6 +7,9 @@ import {
     ERROR_REGISTERING_IN,
     REGISTERED,
     USER,
+    IS_CREATING_TUTOR,
+    ERROR_CREATING_TUTOR,
+    TUTOR,
 } from "../actions/types";
 
 const initialState = {
@@ -19,6 +22,9 @@ const initialState = {
     registerError: null,
     hasError: null,
     token: null,
+    isCreatingTutor: false,
+    createTutorError: null,
+    tutor: {},
     authErrors: {}
 }
 
@@ -81,12 +87,34 @@ export default function(state = initialState, action) {
                 user: action.payload
             }
 
-
         case HAS_ERRORS:
             return {
                 ...state,
                 isRegistering: false,
                 hasError: action.payload,
+            }
+
+        case IS_CREATING_TUTOR:
+            return {
+                ...state,
+                isCreatingTutor: true,
+                createTutorError: null,
+            }
+
+        case ERROR_CREATING_TUTOR:
+            return {
+                ...state,
+                isCreatingTutor: false,
+                createTutorError: action.payload,
+            }
+
+
+        case TUTOR:
+            return {
+                ...state,
+                createTutorError: null,
+                isCreatingTutor: false,
+                tutor: action.payload,
             }
 
 

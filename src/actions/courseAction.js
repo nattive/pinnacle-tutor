@@ -26,6 +26,12 @@ import {
     UPDATE_MODULE_HEADER,
     ERR_UPDATING_MODULE_HEADER,
     MODULE_UPDATED,
+    CREATE_DISCOUNT,
+    DISCOUNT_CREATED,
+    ERROR_CREATING_DISCOUNT,
+    GET_DISCOUNT,
+    DISCOUNT,
+    ERROR_GETTING_DISCOUNT,
 } from "./types"
 import { baseUrl } from "../constants/baseUrl"
 import Axios from "axios"
@@ -40,7 +46,6 @@ export const uploadCourse = data => dispatch => {
         isCareer,
         isFree,
         price,
-        tutor_id,
         sub_category_id,
         course_difficulty
     } = store.getState().courseField
@@ -68,7 +73,6 @@ export const uploadCourse = data => dispatch => {
             isFree,
             price,
             sub_category_id,
-            tutor_id: 1,
             course_difficulty
         }, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
             console.log(res)
@@ -92,6 +96,81 @@ export const uploadCourse = data => dispatch => {
         })
     }
 }
+
+export const createDiscount = data => dispatch => {
+    const token = localStorage.getItem('PO_user_token')
+    const {
+        name,
+        banner,
+        type,
+        discount,
+        due,
+        code,
+        course_id,
+    } = data
+
+    dispatch({
+        type: CREATE_DISCOUNT
+    })
+
+    Axios.post(`${baseUrl}/tutor/discount`, {
+        name,
+        banner,
+        type,
+        discount,
+        due,
+        code,
+        course_id,
+    }, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+        console.log(res)
+        dispatch({
+            type: DISCOUNT_CREATED,
+            payload: res.data
+        })
+        Swal.fire({
+            title: 'Discount Created!',
+            text: JSON.stringify(res.data),
+            icon: 'success',
+            confirmButtonText: 'Okay'
+        })
+    }).catch(err => {
+        console.log(err.response.data.message)
+        Swal.fire({
+            title: 'Error!',
+            text: err.response ? err.response.data && err.response.data.message : JSON.stringify(err),
+            icon: 'error',
+            confirmButtonText: 'Cool'
+        })
+        dispatch({
+            type: ERROR_CREATING_DISCOUNT,
+            payload: err.message || err.message || err.message.data || JSON.stringify(err)
+        })
+    })
+}
+
+export const myDiscounts = VOUdata => dispatch => {
+    const token = localStorage.getItem('PO_user_token')
+
+    dispatch({
+        type: GET_DISCOUNT
+    })
+
+    Axios.get(`${baseUrl}/tutor/discount`, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+        console.log(res)
+        dispatch({
+            type: DISCOUNT,
+            payload: res.data
+        })
+    }).catch(err => {
+        console.log(err.response.data.message)
+
+        dispatch({
+            type: ERROR_GETTING_DISCOUNT,
+            payload: err.message && err.message.data || err.response.data.message || JSON.stringify(err)
+        })
+    })
+}
+
 
 export const addQuiz = ({ data }) => dispatch => {
     console.info(data)
@@ -219,7 +298,6 @@ export const updateCourse = () => dispatch => {
         isFree,
         price,
         objective,
-        tutor_id,
         course_difficulty,
         uploadedCourse,
         description,
@@ -228,80 +306,47 @@ export const updateCourse = () => dispatch => {
     dispatch({
         type: UPDATE_COURSE
     })
+    const token = localStorage.getItem('PO_user_token')
 
-    fetch(`${baseUrl}/courses/update/${uploadedCourse.id}`, {
-        method: 'post',
-        body: JSON.stringify({
-            title,
-            videoUrl,
-            sub_category_id,
-            banner_thumbnail,
-            banner,
-            isPO,
-            isCareer,
-            isFree,
-            price,
-            objective,
-            tutor_id,
-            course_difficulty,
-            description,
-        })
-    }).then(function(response) {
-        return response.json();
-    }).then(function(data) {
+    Axios.put(`${baseUrl}/tutor/courses/${uploadedCourse.id}`, {
+        title,
+        videoUrl,
+        sub_category_id,
+        banner_thumbnail,
+        banner,
+        isPO,
+        isCareer,
+        isFree,
+        price,
+        objective,
+        course_difficulty,
+        description
+    }, { headers: { Authorization: `Bearer ${token}` } }, ).then(res => {
+        console.log(res)
         Swal.fire({
             title: 'success!',
-            text: 'OK',
+            text: res.data,
             icon: 'success',
             confirmButtonText: 'Okay!'
         })
         dispatch({
             type: COURSE_UPDATED,
-            payload: data
+            payload: res.data
         })
-    });
 
-
-    // Axios.post(`${baseUrl}/courses/update/${uploadedCourse.id}`,
-    //     title,
-    //     videoUrl,
-    //     sub_category_id,
-    //     banner_thumbnail,
-    //     banner,
-    //     isPO,
-    //     isCareer,
-    //     isFree,
-    //     price,
-    //     objective,
-    //     tutor_id,
-    //     course_difficulty,
-    //     description,
-    // ).then(res => {
-    //     console.log(res)
-    //     Swal.fire({
-    //         title: 'success!',
-    //         text: res.data,
-    //         icon: 'success',
-    //         confirmButtonText: 'Okay!'
-    //     })
-    //     dispatch({
-    //         type: COURSE_UPDATED,
-    //         payload: res.data
-    //     })
-
-    // }).catch(err => {
-    //     console.log(err)
-    //     Swal.fire({
-    //         title: 'Error!',
-    //         text: err.response ? err.response.message : err.message || err.message.data || JSON.stringify(err),
-    //         icon: 'error',
-    //         confirmButtonText: 'Cool'
-    //     })
-    //     dispatch({
-    //         type: ERR_UPDATING_COURSE,
-    //         payload: err.message || err.message || err.message.data || JSON.stringify(err)
-    //     })
-    // })
+    }).catch(err => {
+        console.log(err)
+        Swal.fire({
+            title: 'Error!',
+            text: err.response ? err.response.message : err.message || err.message.data || JSON.stringify(err),
+            icon: 'error',
+            confirmButtonText: 'Cool'
+        })
+        dispatch({
+            type: ERR_UPDATING_COURSE,
+            payload: err.message || err.message || err.message.data || JSON.stringify(err)
+        })
+    })
 }
 
 export const getAllCourses = () => dispatch => {

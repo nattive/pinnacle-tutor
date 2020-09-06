@@ -14,7 +14,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import {  MainListItems } from "../components/ListMenu";
+import { MainListItems } from "../components/ListMenu";
 import { Switch, Route, BrowserRouter, useHistory, Link, useRouteMatch } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -36,6 +36,10 @@ import Profile from '../Pages/Profile'
 import CourseLists from "../Pages/Course/CourseLists";
 import Course from "../Pages/Course";
 import Modules from "../Pages/Course/Modules";
+import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
+import { me } from "../actions/authAction"
+import DashboardClass from "../Pages/Dashboard/DashboardClass";
+
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -176,6 +180,9 @@ function Dashboard(props) {
         setNotificationOpen(event.currentTarget);
     };
 
+    useEffect(() => {
+        !props.user.id && props.me()
+    }, [props.user])
     const renderMenu = (
         <Menu
             anchorEl={messageOpen}
@@ -233,9 +240,9 @@ function Dashboard(props) {
     return (
         <div className={classes.root}>
             <BrowserRouter>
-                <Backdrop className={classes.backdrop} open={props.appIsLoading}>
-                    <CircularProgress color="inherit" />
-                </Backdrop>
+                <Dimmer active={props.appIsLoading}>
+                    <Loader>{props.loadingText}</Loader>
+                </Dimmer>
                 {/* <Notification /> */}
 
                 <Dialog
@@ -353,16 +360,14 @@ function Dashboard(props) {
 
                     {/* <ChecklistComponent /> */}
                     <Switch>
-                        <Route exact path="/">
-                            <p>home</p>
-                        </Route>
+                        <Route exact path="/" component={(p) => <DashboardClass {...p} />} />
                         <Route path="/myCourses">
                             <CourseLists />
                         </Route>
                         <Route path="/courses">
                             <Course />
                         </Route>
-                         <Route path="/modules">
+                        <Route path="/modules">
                             <Modules />
                         </Route>
                     </Switch>
@@ -381,7 +386,10 @@ function Dashboard(props) {
 }
 
 const mapStateToProps = (state) => ({
-
+    appIsLoading: state.loading.appIsLoading,
+    loadingText: state.loading.loadingText,
+    tutor: state.auth.tutor,
+    user: state.auth.user,
 });
 
-export default connect(mapStateToProps, null)(Dashboard);
+export default connect(mapStateToProps, {me})(Dashboard);

@@ -1,1 +1,1 @@
-export const baseUrl = 'http://pinnacle.test/api'
+export const baseUrl = 'http://pinnacle.test'

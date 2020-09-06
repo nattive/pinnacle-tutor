@@ -32,7 +32,7 @@ class SignUpForm extends Component {
 
   componentDidUpdate(props, state) {
     if (this.props.token !== null)
-      return this.props.history.push('/tutor/create')
+      return this.props.history.push('/auth/tutor/create')
   }
 
   handleChange(event) {
@@ -111,7 +111,7 @@ class SignUpForm extends Component {
             </Segment>
           </Form>
           <Message>
-            <Link to="/login">Login </Link>  if you already have an account
+            <Link to="/auth">Login </Link>  if you already have an account
           </Message>
         </Grid.Column>
       </Grid>

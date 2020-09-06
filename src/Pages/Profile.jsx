@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Avatar, Typography } from "@material-ui/core";
 import { connect } from 'react-redux'
 import { useEffect } from "react";
+import { me } from '../actions/authAction'
 import Skeleton from "@material-ui/lab/Skeleton";
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,19 +32,19 @@ const Profile = (props) => {
     return (
         <div {...rest} className={clsx(classes.root, className)}>
             {
-                props.manager !== undefined ?
+                props.user.id !== undefined ?
                     <>
                         <Avatar
-                            alt
+                            alt={ props.user.name}
                             className={classes.avatar}
                             component={RouterLink}
-                            src
+                            src={props.tutor.image}
                             to="/update/profile"
                         />
                         <Typography className={classes.name} variant="h6">
-                        name
-                            {/* { '': (<Skeleton />)} */}
+                            {props.user.name}
                         </Typography>
+                            <Typography variant='body2'>{props.user.account_type}</Typography>
                     </> : <Typography variant='body2'>Loading profile...</Typography>
             }
 
@@ -56,10 +57,14 @@ Profile.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
- 
+    appIsLoading: state.loading.appIsLoading,
+    loadingText: state.loading.loadingText,
+    tutor: state.auth.tutor,
+    user: state.auth.user,
     
 });
 
 const mapDispatchToProps = {
+    me
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

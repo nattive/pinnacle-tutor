@@ -5,7 +5,7 @@ import {
 
 const initialState = {
     appIsLoading: false,
-    loadingText: '',
+    loadingText: null,
 }
 
 export default function(state = initialState, action) {
@@ -21,6 +21,7 @@ export default function(state = initialState, action) {
         case APP_STOPPED_LOADING:
             return {
                 ...state,
+                loadingText: null,
                 appIsLoading: false,
 
             }

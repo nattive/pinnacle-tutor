@@ -461,8 +461,8 @@ function CourseView(props) {
     };
 
     const handleUploadCourse = () => {
-        // props.uploadCourse()
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        props.uploadCourse()
+        // setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
     };
 
@@ -506,8 +506,6 @@ function CourseView(props) {
                                     >
                                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                         </Button>}
-
-
                                 </div>
                             </div>
                         </StepContent>

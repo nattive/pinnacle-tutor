@@ -24,6 +24,13 @@ import {
     UPDATE_MODULE_HEADER,
     ERR_UPDATING_MODULE_HEADER,
     MODULE_UPDATED,
+    UPDATE_COURSE,
+    GET_DISCOUNT,
+    DISCOUNT,
+    ERROR_GETTING_DISCOUNT,
+    CREATE_DISCOUNT,
+    DISCOUNT_CREATED,
+    ERROR_CREATING_DISCOUNT,
 } from '../actions/types'
 
 
@@ -40,6 +47,7 @@ const initialState = {
     uploadingCourse: false,
     uploadingError: null,
     course: {},
+    courses: [],
     isGettingCourse: false,
     errorGettingCourse: null,
     hasCreatedModule: null,
@@ -54,6 +62,12 @@ const initialState = {
     isUpdatingHeader: false,
     errUpdatingHeader: null,
     headerHasUpdated: null,
+    /******** DISCOUNTS****** */
+    gettingDiscounts: false,
+    discounts: [],
+    discountError: null,
+    isCreatingDiscounts: false,
+    createDiscountError: null
 }
 
 export default function(state = initialState, action) {
@@ -92,7 +106,15 @@ export default function(state = initialState, action) {
         case COURSE_UPDATED:
             return {
                 ...state,
-                updateSuccess: action.payload
+                updateSuccess: action.payload,
+                uploadingCourse: false
+            }
+
+        case UPDATE_COURSE:
+            return {
+                ...state,
+                updateSuccess: action.payload,
+                uploadingCourse: false
             }
 
         case UPLOAD_COURSE:
@@ -112,7 +134,7 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isGettingCourses: false,
-                allCategories: action.payload,
+                courses: action.payload,
             }
 
         case ERR_GETTING_ALL_COURSES:
@@ -214,6 +236,54 @@ export default function(state = initialState, action) {
                 ...state,
                 isUpdatingHeader: false,
                 errUpdatingHeader: action.payload,
+            }
+
+
+        case GET_DISCOUNT:
+            return {
+                ...state,
+                gettingDiscounts: true,
+                discountError: null,
+            }
+
+
+        case DISCOUNT:
+            return {
+                ...state,
+                gettingDiscounts: false,
+                discounts: action.payload,
+            }
+
+
+        case ERROR_GETTING_DISCOUNT:
+            return {
+                ...state,
+                gettingDiscounts: false,
+                discountError: action.payload,
+            }
+
+
+        case CREATE_DISCOUNT:
+            return {
+                ...state,
+                isCreatingDiscounts: true,
+                createDiscountError: null,
+            }
+
+
+        case DISCOUNT_CREATED:
+            return {
+                ...state,
+                discountError: null,
+                isCreatingDiscounts: false,
+            }
+
+
+        case ERROR_CREATING_DISCOUNT:
+            return {
+                ...state,
+                gettingDiscounts: false,
+                createDiscountError: action.payload,
             }
 
         default:

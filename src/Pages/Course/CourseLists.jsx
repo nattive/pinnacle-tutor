@@ -7,7 +7,7 @@ import { getAllCourses, deleteCourse } from '../../actions/courseAction'
 import { Button } from '@material-ui/core'
 import { Link, useRouteMatch } from 'react-router-dom'
 import Skeleton from '@material-ui/lab/Skeleton';
-import windowSize from 'react-window-size';
+// import windowSize from 'react-window-size';
 
 const CourseLists = (props) => {
     useEffect(() => {
@@ -19,7 +19,7 @@ const CourseLists = (props) => {
             <Table celled padded>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell singleLine> Screen height is: {props.windowHeight}</Table.HeaderCell>
+                        <Table.HeaderCell singleLine> #</Table.HeaderCell>
                         <Table.HeaderCell singleLine>Title</Table.HeaderCell>
                         <Table.HeaderCell singleLine>Status</Table.HeaderCell>
                         <Table.HeaderCell singleLine>courseCode</Table.HeaderCell>

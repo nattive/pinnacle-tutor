@@ -6,7 +6,9 @@ import SignIn from './SignIn';
 import bg from "../Assets/tutorBg.jpg"
 import './style.css'
 import SignUpForm from './SignUpForm';
-import { CreateTutorAccount } from './CreateTutorAccount';
+import CreateTutorAccount from './CreateTutorAccount';
+import HeadBar from '../Container/HeadBar';
+import Footer from '../Container/Footer';
 
 
 const Auth = () => {
@@ -15,16 +17,16 @@ const Auth = () => {
         <>
             {/* <div className="overlay" /> */}
             <div className="auth-container">
-                <Grid container justify='center' alignContent='center' spacing={0}>
-                    <Grid item>
-                        <Switch>
-                            <Route exact path={path} render={(props) => <SignIn />} />
-                            <Route path={path + '/register'} render={(props) => <SignUpForm {...props} />} />
-                            <Route path={path + 'tutor/create'} render={(props) => <CreateTutorAccount {...props}/> }/>
-                        </Switch>
-                    </Grid>
+                <HeadBar />
+                <Grid container justify='center' alignContent='center' >
+                    <Switch>
+                        <Route exact path={path} render={(props) => <SignIn />} />
+                        <Route exact path={path + '/register'} render={(props) => <SignUpForm {...props} />} />
+                        <Route exact path={path + '/tutor/create'} render={(props) => <CreateTutorAccount {...props} />} />
+                    </Switch>
                 </Grid>
             </div>
+            <Footer />
         </>
     )
 }

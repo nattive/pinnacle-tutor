@@ -19,15 +19,15 @@ const SignIn = (props) => {
             props.login(email, password)
         }
     }
-    useEffect(() => {
-        props.token && history.push('/')
-    }, [props.token])
+    // useEffect(() => {
+    //     props.token && history.push('/')
+    // }, [props.token])
     return (
-        <Grid textAlign='center' style={{ height: '100vh', zIndex: 10 }} verticalAlign='middle'>
+        <Grid textAlign='center' style={{ height: '100vh', zIndex: 10, }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 700 }}>
-                <Header as='h2' color='blue' textAlign='center'>
+                <Header as='h2' color='white' textAlign='center'>
                     <Image src={logo} /> Log-in to your User account
-      </Header>
+                </Header>
                 <Form size='large' error={loginError}>
                     <Segment stacked>
                         <Message hidden={!loginError} negative={loginError}>{loginError}</Message>
@@ -46,7 +46,7 @@ const SignIn = (props) => {
                     </Segment>
                 </Form>
                 <Message>
-                    You don't have an account? <Link to="/register">Create One</Link>
+                    You don't have an account? <Link to="/auth/register">Create One</Link>
                 </Message>
             </Grid.Column>
         </Grid>

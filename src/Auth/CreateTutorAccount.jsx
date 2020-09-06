@@ -3,8 +3,10 @@ import { connect } from 'react-redux'
 import { useState } from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment, TextArea, Checkbox, Input } from 'semantic-ui-react'
 import { useEffect } from 'react'
+import { createTutor } from "../actions/authAction";
+import { Container } from '@material-ui/core'
 
-export const CreateTutorAccount = (props) => {
+const CreateTutorAccount = (props) => {
     const [isPO_tutor, setIsPO_tutor] = useState(false)
     const [name, setName] = useState(props.user && props.user.name)
     const [image, setImage] = useState('')
@@ -14,22 +16,29 @@ export const CreateTutorAccount = (props) => {
     const [twitter, setTwitter] = useState('')
     const [instagram, setInstagram] = useState('')
     const [youTube, setYouTube] = useState('')
-    const [admin_id, setAdmin_id] = useState('')
     const [linkedIn, setLinkedIn] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
     const [isCotF_tutor, setIsCotF_tutor] = useState(false)
+    const [disableForm, setDisableForm] = useState(true)
     const handleSubmit = () => {
-        return
+        const data = {
+            isPO_tutor,
+            name,
+            image,
+            about,
+            files,
+            facebook,
+            twitter,
+            instagram,
+            youTube,
+            user_id: props.user && props.user.id,
+            linkedIn,
+            isCotF_tutor,
+            disableForm,
+        }
+        props.createTutor(data)
     }
     const field = [
-        {
-            name: name,
-            component: Input,
-            type: 'text',
-            required: true,
-            placeholder: 'Your full Name',
-            error: null,
-            onChange: (e) => setName(e.target.value)
-        },
         {
             name: about,
             component: 'textarea',
@@ -123,45 +132,67 @@ export const CreateTutorAccount = (props) => {
         },
 
     ]
+    
     useEffect(() => {
-        if(!props.user) {
-            props.history.push('/login')
+        if (props.user.id) {
+            setDisableForm(false)
+            setErrorMessage(null)
+        } else {
+            setDisableForm(true)
+            setErrorMessage("You need a user account, or login, or sign up to proceed")
         }
-    }, [])
+    }, [props.user])
+
+    useEffect(() => {
+        if (props.tutor.id) {
+            props.history.push('/')
+        }
+    }, [props.tutor])
+
+     useEffect(() => {
+        if (props.createTutorError) {
+            setErrorMessage(props.createTutorError)
+        }
+    }, [props.createTutorError])
+    
     return (
-        <div style={{margin: '1em 0'}}>
-            <Grid xs={12}>
+        <div style={{ margin: '1em 0' }}>
+            <Container>
                 <Grid.Column >
                     <Header as='h2' color='teal' textAlign='center'>
                         ...And finally
                    </Header>
                     <Form loading={false} unstackable size='large' onSubmit={handleSubmit} >
+                        <Message visible={errorMessage} error>{errorMessage}</Message>
                         <Segment stacked>
                             {/* <Message hidden={!registerError} negative={registerError}>{registerError}</Message> */}
                             {field.map((item, key) => (
                                 <Form.Field iconPosition={item.iconPosition}
                                     icon={item.icon}
-                                    value={item.name} 
+                                    value={item.name}
                                     checked={item.name}
                                     onChange={item.onChange} required={item.required}
                                     label={item.placeholder} control={item.component}
                                     type={item.type} />
                             ))}
-                            <Form.Button color='blue' fluid size='large' content='Submit' />
+                            <Form.Button disabled={disableForm} loading={props.isCreatingTutor} color='blue' fluid size='large' content='Submit' />
                         </Segment>
                     </Form>
                 </Grid.Column>
-            </Grid>
+            </Container>
         </div>
     )
 }
 
 const mapStateToProps = (state) => ({
     user: state.auth.user,
+    createTutorError: state.auth.createTutorError,
+    isCreatingTutor: state.auth.isCreatingTutor,
+    tutor: state.auth.tutor,
 })
 
 const mapDispatchToProps = {
-
+    createTutor
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTutorAccount)

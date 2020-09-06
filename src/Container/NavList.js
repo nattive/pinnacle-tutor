@@ -2,9 +2,10 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import MessageIcon from '@material-ui/icons/Message';
 export const NavList = [{
         name: 'Dashboard',
-        link: '/dashboard',
+        link: '/',
         icon: DashboardIcon,
     },
     {
@@ -18,7 +19,7 @@ export const NavList = [{
             },
             {
                 name: 'Course Tools',
-                link: '/course/tool',
+                link: '/courses/tools',
                 icon: ImportantDevicesIcon,
             },
             {
@@ -32,6 +33,11 @@ export const NavList = [{
         name: 'Resource',
         link: '/resource',
         icon: LibraryBooksIcon,
+    },
+    {
+        name: ' Message',
+        link: '/message',
+        icon: MessageIcon,
     },
 
 ]

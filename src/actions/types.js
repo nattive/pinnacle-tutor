@@ -51,6 +51,23 @@ export const ERR_MAIN_CATEGORIES = 'ERR_MAIN_CATEGORIES'
 
 export const LOAD_SUB_CAT = 'LOAD_SUB_CAT'
 
+
+
+/************************************************
+ *
+ * COURSES DISCOUNT CONSTANTS
+ *
+ * ************************************************/
+
+export const GET_DISCOUNT = 'GET_DISCOUNT'
+export const DISCOUNT = 'DISCOUNT'
+export const ERROR_GETTING_DISCOUNT = 'ERROR_GETTING_DISCOUNT'
+
+
+export const CREATE_DISCOUNT = 'CREATE_DISCOUNT'
+export const DISCOUNT_CREATED = 'DISCOUNT_CREATED'
+export const ERROR_CREATING_DISCOUNT = 'ERROR_CREATING_DISCOUNT'
+
 /************************************************
  *
  * COURSES MODULES CONSTANTS
@@ -117,3 +134,18 @@ export const HAS_ERRORS = 'HAS_ERRORS'
 export const IS_REGISTERING = 'IS_REGISTERING'
 export const ERROR_REGISTERING_IN = 'ERROR_REGISTERING_IN'
 export const REGISTERED = 'REGISTERED'
+
+export const IS_CREATING_TUTOR = 'IS_CREATING_TUTOR'
+export const ERROR_CREATING_TUTOR = 'ERROR_CREATING_TUTOR'
+export const TUTOR = 'TUTOR'
+
+
+/************************************************
+ *
+ * INDEX CONSTANT
+ * 
+ * ************************************************/
+
+export const GET_ACTIVITIES = 'GET_ACTIVITIES'
+export const ERR_GETTING_ACTIVITIES = 'ERR_GETTING_ACTIVITIES'
+export const RECENT_ACTIVITIES = 'RECENT_ACTIVITIES'

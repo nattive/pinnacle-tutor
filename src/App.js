@@ -63,7 +63,14 @@ function App() {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <Router>
-          <AppContainer />
+         <Switch>
+            <Route exact path="/" >
+              <AppContainer />
+              </Route>
+            <Route path="/auth" >
+              <Auth />
+            </Route>
+         </Switch>
         </Router>
       </ThemeProvider>
     </Provider>
