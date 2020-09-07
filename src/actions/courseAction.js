@@ -99,53 +99,61 @@ export const uploadCourse = data => dispatch => {
 
 export const createDiscount = data => dispatch => {
     const token = localStorage.getItem('PO_user_token')
-    const {
-        name,
-        banner,
-        type,
-        discount,
-        due,
-        code,
-        course_id,
-    } = data
+    if (token) {
+        const {
+            name,
+            banner,
+            type,
+            discount,
+            due,
+            code,
+            course_id,
+        } = data
 
-    dispatch({
-        type: CREATE_DISCOUNT
-    })
-
-    Axios.post(`${baseUrl}/tutor/discount`, {
-        name,
-        banner,
-        type,
-        discount,
-        due,
-        code,
-        course_id,
-    }, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
-        console.log(res)
         dispatch({
-            type: DISCOUNT_CREATED,
-            payload: res.data
+            type: CREATE_DISCOUNT
         })
-        Swal.fire({
-            title: 'Discount Created!',
-            text: JSON.stringify(res.data),
-            icon: 'success',
-            confirmButtonText: 'Okay'
+
+        Axios.post(`${baseUrl}/tutor/discount`, {
+            name,
+            banner,
+            type,
+            discount,
+            due,
+            code,
+            course_id,
+        }, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+            console.log(res)
+            dispatch({
+                type: DISCOUNT_CREATED,
+                payload: res.data
+            })
+            Swal.fire({
+                title: 'Discount Created!',
+                text: JSON.stringify(res.data),
+                icon: 'success',
+                confirmButtonText: 'Okay'
+            })
+        }).catch(err => {
+            console.log(err.response.data.message)
+            Swal.fire({
+                title: 'Error!',
+                text: err.response ? err.response.data && err.response.data.message : JSON.stringify(err),
+                icon: 'error',
+                confirmButtonText: 'Cool'
+            })
+            dispatch({
+                type: ERROR_CREATING_DISCOUNT,
+                payload: err.message || err.message || err.message.data || JSON.stringify(err)
+            })
         })
-    }).catch(err => {
-        console.log(err.response.data.message)
-        Swal.fire({
-            title: 'Error!',
-            text: err.response ? err.response.data && err.response.data.message : JSON.stringify(err),
-            icon: 'error',
-            confirmButtonText: 'Cool'
-        })
+    } else {
         dispatch({
             type: ERROR_CREATING_DISCOUNT,
-            payload: err.message || err.message || err.message.data || JSON.stringify(err)
+            payload: "You are not signed in"
         })
-    })
+    }
+
 }
 
 export const myDiscounts = VOUdata => dispatch => {

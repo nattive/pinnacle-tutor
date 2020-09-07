@@ -33,13 +33,14 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Alert from "@material-ui/lab/Alert";
 import Profile from '../Pages/Profile'
+import ProfilePage from '../Pages/ProfilePage'
 import CourseLists from "../Pages/Course/CourseLists";
 import Course from "../Pages/Course";
 import Modules from "../Pages/Course/Modules";
 import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
-import { me } from "../actions/authAction"
+import { me, logout } from "../actions/authAction"
 import DashboardClass from "../Pages/Dashboard/DashboardClass";
-
+import { tokenVariable} from '../constants/baseUrl'
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -179,7 +180,12 @@ function Dashboard(props) {
     const handleNotificationMenuOpen = (event) => {
         setNotificationOpen(event.currentTarget);
     };
-
+useEffect(() => {
+    const token = localStorage.getItem(tokenVariable)
+    if(!token){
+        props.history.push('/auth')
+    }
+}, [])
     useEffect(() => {
         !props.user.id && props.me()
     }, [props.user])
@@ -310,29 +316,38 @@ function Dashboard(props) {
                         </IconButton>
                         <img src={logo_white} alt="uwinit logo" style={{ width: 100 }} />
                         <div className={classes.flexgrow} />
-                        {/* <IconButton onClick={handleNotificationMenuOpen} color="inherit" style={{ float: "right" }}>
-                            <Badge badgeContent={props.notifications.length} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton> */}
-                        <IconButton onClick={props.logout} color="inherit" style={{ float: "right" }}>
-                            <ExitToAppIcon />
-                        </IconButton>
+                        {
+                            props.tutor.id ? (
+                                <>
+                                    <IconButton onClick={handleNotificationMenuOpen} color="inherit" style={{ float: "right" }}>
+                                        <Badge badgeContent={0} color="secondary">
+                                            <NotificationsIcon />
+                                        </Badge>
+                                    </IconButton>
+                                    <IconButton onClick={props.logout} color="inherit" style={{ float: "right" }}>
+                                        <ExitToAppIcon />
+                                    </IconButton>
 
-                        <IconButton
-                            aria-label="account of current user"
-                            aria-controls="primary-search-account-menu"
-                            aria-haspopup="true"
-                            onClick={handleMessageMenuOpen}
-                            color="inherit"
-                            style={{ float: "right" }}
-                        >
-                            <Badge badgeContent={barNotification.length} color="secondary">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        {renderMenu}
-                        {notificationMenu}
+                                    <IconButton
+                                        aria-label="account of current user"
+                                        aria-controls="primary-search-account-menu"
+                                        aria-haspopup="true"
+                                        onClick={handleMessageMenuOpen}
+                                        color="inherit"
+                                        style={{ float: "right" }}
+                                    >
+                                        <Badge badgeContent={barNotification.length} color="secondary">
+                                            <MailIcon />
+                                        </Badge>
+                                    </IconButton>
+                                    {renderMenu}
+                                    {notificationMenu}
+                                </>
+                            ) : (
+                                <Typography color="secondary">Login</Typography>
+                            )
+                        
+                        }
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -349,7 +364,6 @@ function Dashboard(props) {
                     </div>
                     <Divider />
                     {open && <Profile className="m-2" />}
-                    {/* {open && <Profile className="m-2" />} */}
                     <Divider />
                     <List>
                         <MainListItems />
@@ -370,6 +384,10 @@ function Dashboard(props) {
                         <Route path="/modules">
                             <Modules />
                         </Route>
+                        <Route path="/profile">
+                            <ProfilePage />
+                        </Route>
+                        
                     </Switch>
                     {/* <div className={classes.fabButton}>
             <Fab color="primary" onClick={handleGoBack} aria-label="back">
@@ -392,4 +410,4 @@ const mapStateToProps = (state) => ({
     user: state.auth.user,
 });
 
-export default connect(mapStateToProps, {me})(Dashboard);
+export default connect(mapStateToProps, { me, logout})(Dashboard);

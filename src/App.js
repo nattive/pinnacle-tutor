@@ -64,16 +64,12 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
          <Switch>
-            <Route exact path="/" >
-              <AppContainer />
-              </Route>
-            <Route path="/auth" >
-              <Auth />
-            </Route>
+            <Route exact path="/" component={props =>   <AppContainer {...props} /> }/>
+            <Route path="/auth" component={props => <Auth {...props} /> }/>
          </Switch>
         </Router>
       </ThemeProvider>
-    </Provider>
+    </Provider> 
   );
 }
 

@@ -39,7 +39,7 @@ const Profile = (props) => {
                             className={classes.avatar}
                             component={RouterLink}
                             src={props.tutor.image}
-                            to="/update/profile"
+                            to="/profile"
                         />
                         <Typography className={classes.name} variant="h6">
                             {props.user.name}

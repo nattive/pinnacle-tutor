@@ -8,30 +8,42 @@ import { Link, useHistory } from 'react-router-dom'
 
 
 const SignIn = (props) => {
-    const [email, setEmail] = useState()
+    const [email, setEmail] = useState(null)
     const [password, setPassword] = useState('')
+    const [error, setError] = useState(null)
     const history = useHistory()
     const { isLogin,
         loggingIn,
-        loginError } = props
+        loginError, tutor, user } = props
+    useEffect(() => {
+        loginError && setError(loginError)
+    }, [loginError])
+
     const handleLogin = () => {
-        if (email !== '') {
+        if (email) {
             props.login(email, password)
+        } else {
+            setError('Email cannot be empty')
         }
     }
-    // useEffect(() => {
-    //     props.token && history.push('/')
-    // }, [props.token])
+    useEffect(() => {
+        tutor && tutor.id && history.push('/')
+    }, [props.tutor])
+
+    useEffect(() => {
+        user && user.id && !tutor.id && history.push('/auth/tutor/create')
+    }, [props.user])
+
     return (
         <Grid textAlign='center' style={{ height: '100vh', zIndex: 10, }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 700 }}>
                 <Header as='h2' color='white' textAlign='center'>
                     <Image src={logo} /> Log-in to your User account
                 </Header>
-                <Form size='large' error={loginError}>
+                <Form size='large' error={error}>
                     <Segment stacked>
-                        <Message hidden={!loginError} negative={loginError}>{loginError}</Message>
-                        <Form.Input onChange={e => setEmail(e.target.value)} fluid icon='user' iconPosition='left' placeholder='E-mail address' />
+                        <Message hidden={Boolean(!error)} negative={Boolean(error)}>{error}</Message>
+                        <Form.Input onChange={e => setEmail(e.target.value)} type='email' name='email' fluid icon='user' iconPosition='left' placeholder='E-mail address' />
                         <Form.Input
                             fluid
                             icon='lock'
@@ -58,6 +70,9 @@ const mapStateToProps = (state) => ({
     loggingIn: state.auth.loggingIn,
     loginError: state.auth.loginError,
     token: state.auth.token,
+    tutor: state.auth.tutor,
+    user: state.auth.user,
+
 })
 
 const mapDispatchToProps = {
