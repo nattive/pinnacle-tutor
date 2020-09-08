@@ -42,8 +42,7 @@ export const uploadCourse = data => dispatch => {
     const token = localStorage.getItem('PO_user_token')
     const {
         title,
-        isPO,
-        isCareer,
+        courseType,
         isFree,
         price,
         sub_category_id,
@@ -68,8 +67,7 @@ export const uploadCourse = data => dispatch => {
 
         Axios.post(`${baseUrl}/tutor/courses/upload-course/basic`, {
             title,
-            isPO,
-            isCareer,
+            courseType,
             isFree,
             price,
             sub_category_id,
@@ -301,8 +299,7 @@ export const updateCourse = () => dispatch => {
         sub_category_id,
         banner_thumbnail,
         banner,
-        isPO,
-        isCareer,
+        courseType,
         isFree,
         price,
         objective,
@@ -322,8 +319,7 @@ export const updateCourse = () => dispatch => {
         sub_category_id,
         banner_thumbnail,
         banner,
-        isPO,
-        isCareer,
+        courseType,
         isFree,
         price,
         objective,
@@ -385,29 +381,28 @@ export const getAllCourses = () => dispatch => {
 }
 
 export const getCourse = (slug) => dispatch => {
+    const token = localStorage.getItem('PO_user_token')
 
     dispatch({
         type: GET_COURSE
     })
-
-    fetch(`${baseUrl}/tutor/courses/${slug}`)
-        .then(function(response) {
-            return response.json();
-
-        }).then(function(data) {
-            console.log(data);
+    Axios
+        .get(`${baseUrl}/tutor/courses/${slug}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => {
+            console.log(res)
             dispatch({
                 type: COURSE,
-                payload: data
+                payload: res.data
             })
 
         }).catch(err => {
+            console.log(err)
             dispatch({
                 type: ERR_GETTING_COURSE,
-                payload: err
+                payload: err.message || err.message || err.message.data || JSON.stringify(err)
             })
         })
-
 
 }
 

@@ -23,9 +23,8 @@ const CourseLists = (props) => {
                         <Table.HeaderCell singleLine>Title</Table.HeaderCell>
                         <Table.HeaderCell singleLine>Status</Table.HeaderCell>
                         <Table.HeaderCell singleLine>courseCode</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>isPO</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>isCareer</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>isFree</Table.HeaderCell>
+                        <Table.HeaderCell singleLine>Course Type</Table.HeaderCell>
+                        <Table.HeaderCell singleLine>Free / Paid</Table.HeaderCell>
                         <Table.HeaderCell singleLine>Rating</Table.HeaderCell>
                         <Table.HeaderCell singleLine>Course Difficulty</Table.HeaderCell>
                         <Table.HeaderCell singleLine></Table.HeaderCell>
@@ -48,7 +47,7 @@ const CourseLists = (props) => {
                                     <Table.Cell singleLine> <Skeleton anmation={'wave'} /> </Table.Cell>
                                 </Table.Row>
                             </>) :
-                            props.allCategories.length > 0 ? props.allCategories.map(course => (
+                            props.courses.length > 0 ? props.courses.map(course => (
                                 <Table.Row key={course.key}>
                                     <Table.Cell singleLine>banner </Table.Cell>
                                     <Table.Cell singleLine>{course.title} </Table.Cell>
@@ -58,11 +57,7 @@ const CourseLists = (props) => {
                                         {course.isCareer === '1' && <Icon color='green' name='checkmark' size='large' />}
                                     </Table.Cell>
                                     <Table.Cell textAlign='center'>
-                                        {course.isFree === '1' && <Icon color='green' name='checkmark' size='large' />}
-
-                                    </Table.Cell>
-                                    <Table.Cell textAlign='center'>
-                                        {course.isPO === '1' && <Icon color='green' name='checkmark' size='large' />}
+                                        {course.courseType === 'isCareer' ? 'Career of the future Course' : 'Pinnacle Ulearn course' }
 
                                     </Table.Cell>
                                     <Table.Cell>
@@ -86,6 +81,7 @@ const CourseLists = (props) => {
 }
 const mapStateToProps = (state) => ({
     allCategories: state.course.allCategories,
+    courses: state.course.courses,
     isGettingCourses: state.course.isGettingCourses,
     fetchCoursesError: state.course.fetchCoursesError,
 })

@@ -57,7 +57,6 @@ export const logout = () => dispatch => {
         console.log(res)
         localStorage.removeItem('PO_user_token')
 
-
         dispatch({
             type: USER,
             payload: {}
@@ -70,7 +69,7 @@ export const logout = () => dispatch => {
         dispatch({
             type: APP_STOPPED_LOADING
         })
-
+        window.location.href = '/'
     }).catch(err => {
         console.log(err.response)
 

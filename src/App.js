@@ -53,7 +53,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       // This is green.A700 as hex.
-      main: "#fffccc",
+      main: "#d1a802",
     },
   },
 });

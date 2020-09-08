@@ -38,8 +38,7 @@ import {
     SET_VIDEO_URL,
     LOAD_SUB_CAT,
     SET_BANNER,
-    SET_IS_PO,
-    SET_IS_CAREER,
+    SET_COURSE_TYPE,
     SET_IS_FREE,
     SET_PRICE,
     SET_OBJECTIVE,
@@ -89,8 +88,7 @@ const CreateStep = () => {
     const videoUrl = useSelector(state => state.courseField.videoUrl)
     const sub_category_id = useSelector(state => state.courseField.sub_category_id)
     const banner = useSelector(state => state.courseField.banner)
-    const isPO = useSelector(state => state.courseField.isPO)
-    const isCareer = useSelector(state => state.courseField.isCareer)
+    const courseType = useSelector(state => state.courseField.isCareer)
     const isFree = useSelector(state => state.courseField.isFree)
     const price = useSelector(state => state.courseField.price)
     const tutor_id = useSelector(state => state.courseField.tutor_id)
@@ -105,7 +103,20 @@ const CreateStep = () => {
         { key: 'Medium', text: 'Medium', value: 'Medium' },
         { key: 'Top Level', text: 'Top Level', value: 'Top Level' },
     ]
+    const courseTypeOptions = [
+        { key: 'isPO', text: 'Pinnacle Ulearn', value: 'isPO' },
+        { key: 'isCareer', text: 'Career of the future', value: 'isCareer' },
+    ]
+    
     const stepOne = [
+        {
+            name: courseType,
+            control: Select,
+            label: 'Set difficulty level for this course',
+            placeholder: '',
+            courseTypeOptions,
+            onChange: (e, { value }) => dispatch({ type: SET_COURSE_TYPE, payload: value })
+        },
         {
             name: title,
             error: { content: 'Please enter Title of the course', pointing: 'below' }, control: Input,
@@ -114,26 +125,6 @@ const CreateStep = () => {
             onChange: (e) => dispatch({ type: SET_TITLE, payload: e.target.value })
         },
 
-        {
-            name: isPO,
-            control: Checkbox,
-            type: 'checkbox',
-            label: 'Make This course available for Pinnacle ULearn students',
-            placeholder: '',
-            onChange: () => {
-                dispatch({ type: SET_IS_PO, payload: !isPO })
-            }
-        },
-        {
-            name: isCareer,
-            control: Checkbox,
-            type: 'checkbox',
-            label: 'Make This course available for Career of the future students',
-            placeholder: '',
-            onChange: () => {
-                dispatch({ type: SET_IS_CAREER, payload: !isCareer })
-            }
-        },
         {
             name: isFree,
             control: Checkbox,

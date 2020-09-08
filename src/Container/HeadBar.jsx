@@ -13,20 +13,26 @@ export default class HeadBar extends Component {
             <Menu >
                 <Menu.Item
                     name='home'
+                    as='a'
                     active={activeItem === 'home'}
-                    onClick={this.handleItemClick}
+                    href='https://pinnacleonline.org'
                 />
+               
                 <Menu.Item
-                    name='messages'
-                    active={activeItem === 'messages'}
-                    onClick={this.handleItemClick}
+                    name='About Us'
+                    as='a'
+                    active={activeItem === 'About'}
+                    href='https://pinnacleonline.org/about'
                 />
+               
+               
                 <Menu.Item
-                    name='friends'
-                    active={activeItem === 'friends'}
-                    onClick={this.handleItemClick}
+                    name='Tutoring at Pinnacle'
+                    as='a'
+                    active={activeItem === 'Tutoring'}
+                    href='https://pinnacleonline.org/teach'
                 />
-                <Menu.Menu position='right'>
+                {/* <Menu.Menu position='right'>
                     <Menu.Item>
                         <Input icon='search' placeholder='Search...' />
                     </Menu.Item>
@@ -35,7 +41,7 @@ export default class HeadBar extends Component {
                         active={activeItem === 'logout'}
                         onClick={this.handleItemClick}
                     />
-                </Menu.Menu>
+                </Menu.Menu> */}
             </Menu>
         )
     }

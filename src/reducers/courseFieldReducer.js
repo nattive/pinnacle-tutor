@@ -2,8 +2,7 @@ import {
     SET_SUB_CATEGORY_ID,
     SET_VIDEO_URL,
     SET_BANNER,
-    SET_IS_PO,
-    SET_IS_CAREER,
+    SET_COURSE_TYPE,
     SET_IS_FREE,
     SET_PRICE,
     SET_BANNER_THUMBNAIL,
@@ -23,13 +22,12 @@ const initialState = {
     sub_category_id: '',
     banner_thumbnail: '',
     banner: [],
-    isPO: false,
-    isCareer: false,
     isFree: false,
     price: '',
     objective: '',
     tutor_id: '',
     course_difficulty: '',
+    courseType: '',
     description: '',
     uploadedCourse: {},
     hasError: false,
@@ -73,17 +71,10 @@ export default function(state = initialState, action) {
             }
 
 
-        case SET_IS_PO:
+        case SET_COURSE_TYPE:
             return {
                 ...state,
-                isPO: action.payload
-            }
-
-
-        case SET_IS_CAREER:
-            return {
-                ...state,
-                isCareer: action.payload
+                courseType: action.payload
             }
 
 
