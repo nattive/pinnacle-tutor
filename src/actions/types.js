@@ -17,6 +17,13 @@ export const SET_OBJECTIVE = 'SET_OBJECTIVE'
 export const SET_DIFFICULTY = 'SET_DIFFICULTY'
 export const SET_DESCRIPTION = 'SET_DESCRIPTION'
 export const SET_TITLE = 'SET_TITLE'
+export const SET_SUBTITLE = 'SET_SUBTITLE'
+export const SET_CAREER_CATEGORY = 'SET_CAREER_CATEGORY'
+export const SET_DURATION = 'SET_DURATION'
+export const SET_COURSE_PUBLIC_ID = 'SET_COURSE_PUBLIC_ID'
+export const IMAGE_PUBLIC_ID = 'IMAGE_PUBLIC_ID'
+export const VIDEO_PUBLIC_ID = 'VIDEO_PUBLIC_ID'
+export const SET_LANGUAGE = 'SET_LANGUAGE'
 
 /************************************************/
 
@@ -107,6 +114,7 @@ export const SET_MODULE_OBJECTIVE = 'SET_MODULE_OBJECTIVE'
  * ************************************************/
 
 export const EXPAND_NAV = 'EXPAND_NAV'
+export const IS_UPDATE = 'IS_UPDATE'
 
 /************************************************
  *

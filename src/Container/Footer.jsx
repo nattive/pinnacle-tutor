@@ -1,15 +1,16 @@
 import React from "react";
 
 import logo from "../Assets/logoWhite.png";
+import { primaryBlueDefault } from "../constants/colours";
 export default function Footer() {
   return (
-    <footer class="footer">
-      <div class="footer_top">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-3 col-md-6 col-lg-3">
-              <div class="footer_widget">
-                <div class="footer_logo">
+    <footer className="footer" style={{ backgroundColor: primaryBlueDefault }}>
+      <div className="footer_top">
+        <div className="container">
+          <div className="row">
+            <div className="col-xl-3 col-md-6 col-lg-3">
+              <div className="footer_widget">
+                <div className="footer_logo">
                   <a href="#">
                     <img src={logo} alt="" />
                   </a>
@@ -18,30 +19,30 @@ export default function Footer() {
                   <a href="#"> info @pinnacleconsult.org </a> <br /> +234 873
                   672 6782 <br /> 600 / D, Green road, NewYork
                 </p>
-                <div class="socail_links">
+                <div className="socail_links">
                   <ul>
                     <li>
                       <a href="#">
-                        <i class="ti-facebook"> </i>
+                        <i className="ti-facebook"> </i>
                       </a>
                     </li>
                     <li>
                       <a href="#">
-                        <i class="ti-twitter-alt"> </i>
+                        <i className="ti-twitter-alt"> </i>
                       </a>
                     </li>
                     <li>
                       <a href="#">
-                        <i class="fa fa-instagram"> </i>
+                        <i className="fa fa-instagram"> </i>
                       </a>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-            <div class="col-xl-2 col-md-6 col-lg-3">
-              <div class="footer_widget">
-                <h3 class="footer_title"> Services </h3>
+            <div className="col-xl-2 col-md-6 col-lg-3">
+              <div className="footer_widget">
+                <h3 className="footer_title"> Services </h3>
                 <ul>
                   <li>
                     <a href="#"> Pinnacle Online </a>
@@ -61,9 +62,9 @@ export default function Footer() {
                 </ul>
               </div>
             </div>
-            <div class="col-xl-2 col-md-6 col-lg-2">
-              <div class="footer_widget">
-                <h3 class="footer_title"> Useful Links </h3>
+            <div className="col-xl-2 col-md-6 col-lg-2">
+              <div className="footer_widget">
+                <h3 className="footer_title"> Useful Links </h3>
                 <ul>
                   <li>
                     <a href="#"> About </a>
@@ -95,14 +96,14 @@ export default function Footer() {
                 </ul>
               </div>
             </div>
-            <div class="col-xl-4 col-md-6 col-lg-4">
-              <div class="footer_widget">
-                <h3 class="footer_title"> Subscribe </h3>
-                <form action="#" class="newsletter_form">
+            <div className="col-xl-4 col-md-6 col-lg-4">
+              <div className="footer_widget">
+                <h3 className="footer_title"> Subscribe </h3>
+                <form action="#" className="newsletter_form">
                   <input type="text" placeholder="Enter your mail" />
                   <button type="submit"> Subscribe </button>
                 </form>
-                <p class="newsletter_text">
+                <p className="newsletter_text">
                   Be the first to know what we are up to by subscribing to our
                   mailing list, you can unsubscribe at any time
                 </p>
@@ -111,16 +112,16 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div class="copy-right_text">
-        <div class="container">
-          <div class="footer_border"> </div>
-          <div class="row">
-            <div class="col-xl-12">
-              <p class="copy_right text-center">
+      <div className="copy-right_text">
+        <div className="container">
+          <div className="footer_border"> </div>
+          <div className="row">
+            <div className="col-xl-12">
+              <p className="copy_right text-center">
                 Copyright & copy; All rights reserved | Pinnacle Consult
               </p>
             </div>
-              {/* <small className="text-center">
+            {/* <small classNameName="text-center">
                 This website was designed and developed by
                 <a href="http://www.github.com/nattive"> Nattive inc </a>
               </small> */}

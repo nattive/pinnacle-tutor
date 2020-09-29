@@ -5,6 +5,7 @@ import { Button, Form, Grid, Header, Image, Message, Segment, TextArea, Checkbox
 import { useEffect } from 'react'
 import { createTutor } from "../actions/authAction";
 import { Container } from '@material-ui/core'
+import { Link } from 'react-router-dom/cjs/react-router-dom'
 
 const CreateTutorAccount = (props) => {
     const [isPO_tutor, setIsPO_tutor] = useState(false)
@@ -19,6 +20,7 @@ const CreateTutorAccount = (props) => {
     const [linkedIn, setLinkedIn] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCotF_tutor, setIsCotF_tutor] = useState(false)
+    const [unAuth, setUnAuth] = useState(false);
     const [disableForm, setDisableForm] = useState(true)
     const handleSubmit = () => {
         const data = {
@@ -139,12 +141,13 @@ const CreateTutorAccount = (props) => {
             setErrorMessage(null)
         } else {
             setDisableForm(true)
-            setErrorMessage("You need a user account, or login, or sign up to proceed")
+            setUnAuth(true)
+            setErrorMessage("You need a user account, login, or sign up to proceed")
         }
     }, [props.user])
 
     useEffect(() => {
-        if (props.tutor.id) {
+        if (props.tutor && props.tutor.tutor && props.tutor.tutor.id) {
             props.history.push('/')
         }
     }, [props.tutor])
@@ -156,32 +159,51 @@ const CreateTutorAccount = (props) => {
     }, [props.createTutorError])
     
     return (
-        <div style={{ margin: '1em 0' }}>
-            <Container>
-                <Grid.Column >
-                    <Header as='h2' color='teal' textAlign='center'>
-                        ...And finally
-                   </Header>
-                    <Form loading={false} unstackable size='large' onSubmit={handleSubmit} >
-                        <Message visible={errorMessage} error>{errorMessage}</Message>
-                        <Segment stacked>
-                            {/* <Message hidden={!registerError} negative={registerError}>{registerError}</Message> */}
-                            {field.map((item, key) => (
-                                <Form.Field iconPosition={item.iconPosition}
-                                    icon={item.icon}
-                                    value={item.name}
-                                    checked={item.name}
-                                    onChange={item.onChange} required={item.required}
-                                    label={item.placeholder} control={item.component}
-                                    type={item.type} />
-                            ))}
-                            <Form.Button disabled={disableForm} loading={props.isCreatingTutor} color='blue' fluid size='large' content='Submit' />
-                        </Segment>
-                    </Form>
-                </Grid.Column>
-            </Container>
-        </div>
-    )
+      <div style={{ margin: "1em 0" }}>
+        <Container>
+          <Grid.Column>
+            <Header as="h2" color="teal" textAlign="center">
+              ...And finally
+            </Header>
+            <Form
+              loading={false}
+              unstackable
+              size="large"
+              onSubmit={handleSubmit}
+            >
+              <Message visible={errorMessage} error>
+                {errorMessage} {unAuth && <Link to="/auth">Login</Link>}
+              </Message>
+              <Segment stacked>
+                {/* <Message hidden={!registerError} negative={registerError}>{registerError}</Message> */}
+                {field.map((item, key) => (
+                  <Form.Field
+                    iconPosition={item.iconPosition}
+                    icon={item.icon}
+                    value={item.name}
+                    disableForm={disableForm}
+                    checked={item.name}
+                    onChange={item.onChange}
+                    required={item.required}
+                    label={item.placeholder}
+                    control={item.component}
+                    type={item.type}
+                  />
+                ))}
+                <Form.Button
+                  disabled={disableForm}
+                  loading={props.isCreatingTutor}
+                  color="blue"
+                  fluid
+                  size="large"
+                  content="Submit"
+                />
+              </Segment>
+            </Form>
+          </Grid.Column>
+        </Container>
+      </div>
+    );
 }
 
 const mapStateToProps = (state) => ({

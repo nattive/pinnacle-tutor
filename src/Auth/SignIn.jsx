@@ -26,20 +26,23 @@ const SignIn = (props) => {
             setError('Email cannot be empty')
         }
     }
-    useEffect(() => {
-        tutor && tutor.id && history.push('/')
-    }, [props.tutor])
+    // useEffect(() => {
+    //     tutor && tutor.id && history.push('/')
+    //     // !tutor && history.push('/auth/tutor/create')
+
+    // }, [props.tutor])
 
     useEffect(() => {
-        user && user.id && !tutor.id && history.push('/auth/tutor/create')
+        user && user.id && !tutor && history.push('/auth/tutor/create')
     }, [props.user])
 
     return (
-        <Grid textAlign='center' style={{ height: '100vh', zIndex: 10, }} verticalAlign='middle'>
-            <Grid.Column style={{ maxWidth: 700 }}>
-                <Header as='h2' color='white' textAlign='center'>
-                    <Image src={logo} /> Log-in to your User account
-                </Header>
+
+        <Grid textAlign='center' style={{ height: '100vh', zIndex: 10, maxWidth: 500 }} verticalAlign='middle'>
+            <Grid.Column >
+                <Header as='h2' color='blue' textAlign='center'>
+                    Log-in to your User account
+      </Header>
                 <Form size='large' error={error}>
                     <Segment stacked>
                         <Message hidden={Boolean(!error)} negative={Boolean(error)}>{error}</Message>

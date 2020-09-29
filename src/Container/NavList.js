@@ -29,15 +29,15 @@ export const NavList = [{
             },
         ]
     },
-    {
-        name: 'Resource',
-        link: '/resource',
-        icon: LibraryBooksIcon,
-    },
-    {
-        name: ' Message',
-        link: '/message',
-        icon: MessageIcon,
-    },
+    // {
+    //     name: 'Resource',
+    //     link: '/resource',
+    //     icon: LibraryBooksIcon,
+    // },
+    // {
+    //     name: ' Message',
+    //     link: '/message',
+    //     icon: MessageIcon,
+    // },
 
 ]

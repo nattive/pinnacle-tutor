@@ -20,6 +20,7 @@ import AppContainer from "./Container/AppContainer";
 import CourseClass from './Pages/Course';
 import CourseLists from './Pages/Course/CourseLists';
 import { Grid, ThemeProvider, createMuiTheme } from '@material-ui/core';
+import { primaryBlueDefault } from './constants/colours';
 const routes = [
   {
     path: "/",
@@ -49,7 +50,7 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       // Purple and green play nicely together.
-      main: "#000066",
+      main: primaryBlueDefault,
     },
     secondary: {
       // This is green.A700 as hex.

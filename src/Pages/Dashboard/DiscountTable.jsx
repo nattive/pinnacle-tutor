@@ -1,11 +1,8 @@
 import React, { Component, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Icon, Label, Menu, Table, Select } from 'semantic-ui-react'
-import { myDiscounts } from "../../actions/courseAction"
 const DiscountTable = (props) => {
-    useEffect(() => {
-        props.myDiscounts()
-    }, [])
+ 
     return (
         <div>
             <Table celled style={{ width: '100%', overflow: 'auto' }}>
@@ -71,7 +68,7 @@ const mapStateToProps = (state) => ({
 
 
 const mapDispatchToProps = {
-    myDiscounts
+    // myDiscounts
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DiscountTable)

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { baseUrl } from "../constants/baseUrl"
+import { baseUrl, tokenVariable } from "../constants/baseUrl"
 import {
     IS_LOGGING,
     ERROR_LOGGING_IN,
@@ -35,11 +35,11 @@ export const login = (email, password) => dispatch => {
             payload: res.data.user
         })
         console.log(res)
-        localStorage.removeItem('PO_user_token')
-        localStorage.setItem('PO_user_token', res.data.access_token)
+        localStorage.removeItem(tokenVariable)
+        localStorage.setItem(tokenVariable, res.data.access_token)
     }).catch(err => {
-        console.log(err)
-        dispatch({ type: ERROR_LOGGING_IN, payload: (err.response && err.response.data && err.response.data.message) || JSON.stringify(err) })
+        console.log(err.response)
+        dispatch({ type: ERROR_LOGGING_IN, payload: (err.response && err.response.data && err.response.data.error) || JSON.stringify(err) })
         console.log(err.response)
     })
 }
@@ -50,12 +50,12 @@ export const logout = () => dispatch => {
         type: APP_LOADER,
         payload: 'logging out'
     })
-    const token = localStorage.getItem('PO_user_token')
+    const token = localStorage.getItem(tokenVariable)
     axios.get(`${baseUrl}/logout`, {
         headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
         console.log(res)
-        localStorage.removeItem('PO_user_token')
+        localStorage.removeItem(tokenVariable)
 
         dispatch({
             type: USER,
@@ -69,7 +69,7 @@ export const logout = () => dispatch => {
         dispatch({
             type: APP_STOPPED_LOADING
         })
-        window.location.href = '/'
+        window.location.href = '/auth'
     }).catch(err => {
         console.log(err.response)
 
@@ -98,8 +98,8 @@ export const register = data => dispatch => {
         account_type: 'tutor',
     }).then(res => {
         console.log(res)
-        localStorage.removeItem('PO_user_token')
-        localStorage.setItem('PO_user_token', res.data.access_token)
+        localStorage.removeItem(tokenVariable)
+        localStorage.setItem(tokenVariable, res.data.access_token)
 
         dispatch({
             type: REGISTERED,
@@ -128,7 +128,7 @@ export const register = data => dispatch => {
 }
 
 export const createTutor = data => dispatch => {
-    const token = localStorage.getItem("PO_user_token")
+    const token = localStorage.getItem(tokenVariable)
     dispatch({ type: IS_CREATING_TUTOR })
     const {
         isCotF_tutor,
@@ -137,7 +137,6 @@ export const createTutor = data => dispatch => {
         image,
         about,
         files,
-        user_id,
         facebook,
         twitter,
         linkedIn,
@@ -150,7 +149,6 @@ export const createTutor = data => dispatch => {
         image,
         about,
         files,
-        user_id,
         facebook,
         twitter,
         linkedIn,
@@ -190,9 +188,9 @@ export const createTutor = data => dispatch => {
     })
 }
 export const me = () => dispatch => {
-    const token = localStorage.getItem("PO_user_token")
+    const token = localStorage.getItem(tokenVariable)
     dispatch({ type: APP_LOADER, payload: 'authenticating' })
-    dispatch({ type: APP_STOPPED_LOADING })
+        // dispatch({ type: APP_STOPPED_LOADING })
 
 
     axios.get(`${baseUrl}/me`, {

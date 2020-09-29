@@ -18,7 +18,7 @@ const initialState = {
     loggingIn: false,
     isRegistering: false,
     registered: false,
-    loginError: false,
+    loginError: null,
     registerError: null,
     hasError: null,
     token: null,
@@ -53,6 +53,7 @@ export default function(state = initialState, action) {
                 loggingIn: false,
                 isLogin: action.payload,
                 user: action.payload,
+                loginError: null,
             }
 
 
@@ -61,8 +62,8 @@ export default function(state = initialState, action) {
                 ...state,
                 isRegistering: true,
                 registerError: null,
-                authErrors: {}
-
+                authErrors: {},
+                loginError: null,
             }
 
 
@@ -84,6 +85,7 @@ export default function(state = initialState, action) {
         case USER:
             return {
                 ...state,
+                loginError: null,
                 user: action.payload
             }
 

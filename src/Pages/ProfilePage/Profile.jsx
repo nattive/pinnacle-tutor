@@ -23,6 +23,38 @@ const Profile = (props) => {
     const [disableForm, setDisableForm] = useState(true)
 
 
+const handleUploadImage =
+  window.cloudinary &&
+  window.cloudinary.createUploadWidget(
+    {
+      cloudName: "charisbiz-africa",
+      upload_preset: "qtwirqod",
+      multiple: false,
+      autoMinimize: true,
+      themes: "minimal",
+      sources: ["local", "url", "dropbox"],
+      clientAllowedFormats: ["jpg", "jpeg", "png"],
+      text: {
+        en: {
+          local: {
+            browse: "Upload image",
+            main_title: "Upload Profile Image",
+            dd_title_single: "Drag and Drop a Image file here",
+            dd_title_multi: "Drag and Drop a Image file here",
+            drop_title_single: "Drag and Drop a Image file here",
+            drop_title_multiple: "Drag and Drop a Image file here",
+          },
+        },
+      },
+    },
+    (error, result) => {
+      if (result.event == "success") {
+        setImage(result.info.url)
+        console.log(result.info); // result.info contains data from upload
+      }
+    }
+  );
+
     const field = [
         {
             name: about,
@@ -48,15 +80,6 @@ const Profile = (props) => {
             input: 'checkbox',
             placeholder: 'Do you want to be a tutor for the career of the future?',
             onChange: (e, c) => setIsCotF_tutor(c)
-
-        },
-        {
-            name: image,
-            type: 'file',
-            component: 'input',
-            placeholder: 'Upload a profile image',
-            error: '',
-            onChange: (e) => setImage(e.target.value)
 
         },
         {
@@ -168,62 +191,93 @@ const Profile = (props) => {
     ]
     const { tutor, user } = props
     return (
-        <div>
-            <Container>
-                <Grid container style={{ margin: '3em' }}>
-                    <Grid item xs={12} md={4} justify='center'>
-                        <Container>
-                            <SemanticGrid verticalAlign='middle'>
-                                <Item >
-                                    <div className="mx-auto">
-                                        <Avatar alt={user.name} style={{ width: '8em', height: '8em' }} />
-                                    </div>
-                                    <Segment>
-                                        <Item.Group divided>
-                                            <Item.Content>
-                                                <Item.Header as='h2'>{user.name}</Item.Header>
-                                                <Item.Meta>Your short Bio</Item.Meta>
-                                                <Divider />
-                                                <Item.Description className="mb-4" >{tutor.about}</Item.Description>
-                                                <Item.Description>
-                                                    <Item.Meta>Description</Item.Meta>
-                                                    <Divider />
-                                                </Item.Description>
-                                                <Item.Extra>{`You are a ${tutor.isCotF_tutor === 1 || tutor.isCotF_tutor === "1" ?
-                                                    "Career of the future Tutor" : tutor.isPO === 1 || tutor.isPO === "1" ?
-                                                        "Pinnacle Ulearn tutor" : "Free resource tutor"}, 
-                                                You have ${tutor.rating || 0} rating`}</Item.Extra>
-                                            </Item.Content>
-                                        </Item.Group>
-                                    </Segment>
-                                </Item>
-                            </SemanticGrid>
-
-
-                        </Container>
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                        <Form loading={false} unstackable size='large' onSubmit={handleSubmit} >
-                            <Message visible={errorMessage} error>{errorMessage}</Message>
-                            <Segment stacked>
-                                <Header as="h5">Update your Tutor profile</Header>
-                                {field.map((item, key) => (
-                                    <Form.Field iconPosition={item.iconPosition}
-                                        icon={item.icon}
-                                        value={item.name}
-                                        checked={item.name}
-                                        onChange={item.onChange} required={item.required}
-                                        label={item.placeholder} control={item.component}
-                                        type={item.type} />
-                                ))}
-                                <Form.Button disabled={disableForm} loading={props.isCreatingTutor} color='blue' fluid size='large' content='Submit' />
-                            </Segment>
-                        </Form>
-                    </Grid>
-                </Grid>
-            </Container >
-        </div >
-    )
+      <div>
+        <Container>
+          <Grid container style={{ margin: "3em" }}>
+            <Grid item xs={12} md={4} justify="center">
+              <Container>
+                <SemanticGrid verticalAlign="middle">
+                  <Item>
+                    <div className="mx-auto">
+                      <Avatar
+                        src={props.tutor.image}
+                        component={Button}
+                        onClick={handleUploadImage}
+                        alt={user.name}
+                        style={{ width: "100%", height: "20em" }}
+                      />
+                    </div>
+                    <Segment>
+                      <Item.Group divided>
+                        <Item.Content>
+                          <Item.Header as="h2">{user.name}</Item.Header>
+                          <Item.Meta>Your short Bio</Item.Meta>
+                          <Divider />
+                          <Item.Description className="mb-4">
+                            {tutor.about}
+                          </Item.Description>
+                          <Item.Description>
+                            <Item.Meta>Description</Item.Meta>
+                            <Divider />
+                          </Item.Description>
+                          <Item.Extra>{`You are a ${
+                            tutor.isCotF_tutor === 1 ||
+                            tutor.isCotF_tutor === "1"
+                              ? "Career of the future Tutor"
+                              : tutor.isPO === 1 || tutor.isPO === "1"
+                              ? "Pinnacle Ulearn tutor"
+                              : "Free resource tutor"
+                          }, 
+                                                You have ${
+                                                  tutor.rating || 0
+                                                } rating`}</Item.Extra>
+                        </Item.Content>
+                      </Item.Group>
+                    </Segment>
+                  </Item>
+                </SemanticGrid>
+              </Container>
+            </Grid>
+            <Grid item xs={12} md={7}>
+              <Form
+                loading={false}
+                unstackable
+                size="large"
+                onSubmit={handleSubmit}
+              >
+                <Message visible={errorMessage} error>
+                  {errorMessage}
+                </Message>
+                <Segment stacked>
+                  <Header as="h5">Update your Tutor profile</Header>
+                  {field.map((item, key) => (
+                    <Form.Field
+                      iconPosition={item.iconPosition}
+                      icon={item.icon}
+                      value={item.name}
+                      checked={item.name}
+                      onChange={item.onChange}
+                      required={item.required}
+                      label={item.placeholder}
+                      control={item.component}
+                      type={item.type}
+                    />
+                  ))}
+                  <Form.Button
+                    disabled={disableForm}
+                    loading={props.isCreatingTutor}
+                    color="blue"
+                    fluid
+                    size="large"
+                    content="Submit"
+                  />
+                </Segment>
+              </Form>
+            </Grid>
+          </Grid>
+        </Container>
+      </div>
+    );
 }
 
 const mapStateToProps = (state) => ({

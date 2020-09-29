@@ -31,7 +31,7 @@ class SignUpForm extends Component {
   }
 
   componentDidUpdate(props, state) {
-    if (this.props.token !== null)
+    if (this.props.user.id)
       return this.props.history.push('/auth/tutor/create')
   }
 
@@ -88,7 +88,7 @@ class SignUpForm extends Component {
       loginError } = this.props
     return (
       
-      <Grid textAlign='center' style={{ height: '100vh', zIndex: 10 }} verticalAlign='middle'>
+      <Grid textAlign='center' style={{ height: '100vh', zIndex: 10, maxWidth: 500  }} verticalAlign='middle'>
         <Grid.Column >
           <Header as='h2' color='teal' textAlign='center'>
             Create An Account

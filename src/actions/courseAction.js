@@ -32,20 +32,27 @@ import {
     GET_DISCOUNT,
     DISCOUNT,
     ERROR_GETTING_DISCOUNT,
+    LOAD_SUB_CAT,
 } from "./types"
-import { baseUrl } from "../constants/baseUrl"
+import { baseUrl, tokenVariable } from "../constants/baseUrl"
 import Axios from "axios"
 import store from "../constants/store"
 import Swal from 'sweetalert2'
 
 export const uploadCourse = data => dispatch => {
-    const token = localStorage.getItem('PO_user_token')
+    const token = localStorage.getItem(tokenVariable)
     const {
         title,
+        subtitle,
         courseType,
         isFree,
+        prerequisite,
+        duration,
+        video_public_id,
+        image_public_id,
         price,
         sub_category_id,
+        career_category_id,
         course_difficulty
     } = store.getState().courseField
 
@@ -67,10 +74,16 @@ export const uploadCourse = data => dispatch => {
 
         Axios.post(`${baseUrl}/tutor/courses/upload-course/basic`, {
             title,
+            subtitle,
             courseType,
             isFree,
+            prerequisite,
+            duration,
+            video_public_id,
+            image_public_id,
             price,
             sub_category_id,
+            career_category_id,
             course_difficulty
         }, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
             console.log(res)
@@ -96,7 +109,7 @@ export const uploadCourse = data => dispatch => {
 }
 
 export const createDiscount = data => dispatch => {
-    const token = localStorage.getItem('PO_user_token')
+    const token = localStorage.getItem(tokenVariable)
     if (token) {
         const {
             name,
@@ -154,8 +167,8 @@ export const createDiscount = data => dispatch => {
 
 }
 
-export const myDiscounts = VOUdata => dispatch => {
-    const token = localStorage.getItem('PO_user_token')
+export const myDiscounts = () => dispatch => {
+    const token = localStorage.getItem(tokenVariable)
 
     dispatch({
         type: GET_DISCOUNT
@@ -168,11 +181,11 @@ export const myDiscounts = VOUdata => dispatch => {
             payload: res.data
         })
     }).catch(err => {
-        console.log(err.response.data.message)
+        console.log(err.response ? err.response.data.message : err)
 
         dispatch({
             type: ERROR_GETTING_DISCOUNT,
-            payload: err.message && err.message.data || err.response.data.message || JSON.stringify(err)
+            payload: err.response ? err.response.data.message : JSON.stringify(err)
         })
     })
 }
@@ -194,7 +207,7 @@ export const addQuiz = ({ data }) => dispatch => {
         type: ADD_QUIZ
     })
 
-    Axios.post(`${baseUrl}/tutor/courses/add-question`, {
+    Axios.post(`${baseUrl}/tutor/courses/quiz`, {
         question,
         course_materials_id,
         optionA,
@@ -220,7 +233,7 @@ export const addQuiz = ({ data }) => dispatch => {
             title: 'Error!',
             text: err.response ? err.response.data && err.response.data.message : JSON.stringify(err),
             icon: 'error',
-            confirmButtonText: 'Cool'
+            confirmButtonText: 'Ok'
         })
         dispatch({
             type: ERR_ADDING_QUIZ,
@@ -257,14 +270,16 @@ export const uploadCourseMaterial = () => dispatch => {
             type: COURSE_FIELD_HAS_ERROR,
             payload: false
         })
-        Axios.post(`${baseUrl}/tutor/course/add-module`, {
+        Axios.post(`${baseUrl}/tutor/courses/materials`, {
             title,
             course_module_id,
             text,
             objective,
             prerequisite,
-            videoPath: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kaveri_by_Dubare_Forest.jpg/1200px-Kaveri_by_Dubare_Forest.jpg',
-            images: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kaveri_by_Dubare_Forest.jpg/1200px-Kaveri_by_Dubare_Forest.jpg',
+            // videoPath: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kaveri_by_Dubare_Forest.jpg/1200px-Kaveri_by_Dubare_Forest.jpg',
+            videoPath,
+            images,
+            // images: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kaveri_by_Dubare_Forest.jpg/1200px-Kaveri_by_Dubare_Forest.jpg',
         }).then(res => {
             console.log(res)
             dispatch({
@@ -296,9 +311,12 @@ export const updateCourse = () => dispatch => {
     const {
         title,
         videoUrl,
+        subtitle,
         sub_category_id,
         banner_thumbnail,
         banner,
+        video_public_id,
+        image_public_id,
         courseType,
         isFree,
         price,
@@ -311,20 +329,24 @@ export const updateCourse = () => dispatch => {
     dispatch({
         type: UPDATE_COURSE
     })
-    const token = localStorage.getItem('PO_user_token')
+    const token = localStorage.getItem(tokenVariable)
 
     Axios.put(`${baseUrl}/tutor/courses/${uploadedCourse.id}`, {
         title,
+        subtitle,
         videoUrl,
         sub_category_id,
         banner_thumbnail,
         banner,
+        video_public_id,
+        image_public_id,
         courseType,
         isFree,
         price,
         objective,
         course_difficulty,
-        description
+        uploadedCourse,
+        description,
     }, { headers: { Authorization: `Bearer ${token}` } }, ).then(res => {
         console.log(res)
         Swal.fire({
@@ -354,34 +376,32 @@ export const updateCourse = () => dispatch => {
 }
 
 export const getAllCourses = () => dispatch => {
+    const token = localStorage.getItem(tokenVariable)
 
     dispatch({
         type: GET_ALL_COURSES
     })
 
-    fetch(`${baseUrl}/tutor/courses/my/${1}`)
-        .then(function(response) {
-            return response.json();
 
-        }).then(function(data) {
-            console.log(data);
-            dispatch({
-                type: ALL_COURSES,
-                payload: data
-            })
-
-        }).catch(err => {
-            dispatch({
-                type: ERR_GETTING_ALL_COURSES,
-                payload: err
-            })
+    Axios.get(`${baseUrl}/tutor/courses`, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+        console.log(res)
+        dispatch({
+            type: ALL_COURSES,
+            payload: res.data
         })
+    }).catch(err => {
+        console.log(err.response ? err.response.data.message : err)
 
+        dispatch({
+            type: ERR_GETTING_ALL_COURSES,
+            payload: err.response ? err.response.data.message : JSON.stringify(err)
+        })
+    })
 
 }
 
 export const getCourse = (slug) => dispatch => {
-    const token = localStorage.getItem('PO_user_token')
+    const token = localStorage.getItem(tokenVariable)
 
     dispatch({
         type: GET_COURSE
@@ -412,11 +432,36 @@ export const getAllMainCategories = () => dispatch => {
         type: GET_ALL_MAIN_CATEGORY
     })
 
-    Axios.get(`${baseUrl}/courses/main_controller/all`, ).then(res => {
+    Axios.get(`${baseUrl}/course/category/main`, ).then(res => {
         console.log(res)
         dispatch({
             type: MAIN_CATEGORIES,
             payload: res.data
+        })
+
+    }).catch(err => {
+        console.log(err)
+        dispatch({
+            type: ERR_MAIN_CATEGORIES,
+            payload: err.message || err.message || err.message.data || JSON.stringify(err)
+        })
+    })
+}
+
+export const getAllCoFCategories = () => dispatch => {
+
+    dispatch({
+        type: GET_ALL_MAIN_CATEGORY
+    })
+
+    Axios.get(`${baseUrl}/courses/coft/categories`, ).then(res => {
+        console.log(res)
+        dispatch({
+            type: LOAD_SUB_CAT,
+            payload: {
+                name: 'Career of the future ',
+                sub_categories: [...res.data]
+            }
         })
 
     }).catch(err => {
@@ -434,12 +479,18 @@ export const createModuleHeader = (data) => dispatch => {
         type: CREATE_MODULE_HEADER
     })
 
-    Axios.post(`${baseUrl}/courses/nodules/store`, {
+    Axios.post(`${baseUrl}/tutor/courses/module`, {
         title: data.title,
         course_id: data.course_id,
 
     }).then(res => {
         console.log(res)
+        Swal.fire({
+            title: 'Done!',
+            text: res.data,
+            icon: 'success',
+            confirmButtonText: 'Cool'
+        })
         dispatch({
             type: MODULE_HEADER,
             payload: res.data
@@ -483,7 +534,7 @@ export const updateModuleHeader = (data) => dispatch => {
 }
 
 export const deleteCourse = (id) => dispatch => {
-
+    const token = localStorage.getItem(tokenVariable)
     Swal.fire({
         title: 'Delete course?',
         text: "You are about to permanenly delete this course, you won't be able to revert this!",
@@ -498,7 +549,7 @@ export const deleteCourse = (id) => dispatch => {
             dispatch({
                 type: APP_LOADER
             })
-            Axios.delete(`${baseUrl}/tutor/courses/delete/${id}`).then(res => {
+            Axios.delete(`${baseUrl}/tutor/courses/delete/${id}`, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
                 console.log(res)
                 dispatch({
                     type: APP_STOPPED_LOADING

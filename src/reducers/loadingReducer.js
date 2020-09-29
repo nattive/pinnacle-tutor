@@ -4,7 +4,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-    appIsLoading: false,
+    appIsLoading: true,
     loadingText: null,
 }
 

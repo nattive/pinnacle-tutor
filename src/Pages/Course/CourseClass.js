@@ -6,7 +6,9 @@ import CourseView from './CourseView.jsx';
 import CourseRoutes from './CourseRoutes.jsx';
 
 class CourseClass extends React.Component {
-    
+    /**
+     * to delete
+     */
 
     render() {
         return <CourseRoutes / >

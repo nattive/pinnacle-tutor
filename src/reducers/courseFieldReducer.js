@@ -5,7 +5,7 @@ import {
     SET_COURSE_TYPE,
     SET_IS_FREE,
     SET_PRICE,
-    SET_BANNER_THUMBNAIL,
+    IS_UPDATE,
     SET_OBJECTIVE,
     SET_DIFFICULTY,
     SET_DESCRIPTION,
@@ -13,11 +13,18 @@ import {
     COURSE_UPLOADED,
     COURSE_FIELD_HAS_ERROR,
     ERR_UPLOADING_COURSE,
-    UPLOAD_COURSE
+    UPLOAD_COURSE,
+    SET_DURATION,
+    VIDEO_PUBLIC_ID,
+    SET_LANGUAGE,
+    SET_CAREER_CATEGORY,
+    IMAGE_PUBLIC_ID,
+    SET_SUBTITLE
 } from "../actions/types";
 
 const initialState = {
     title: '',
+    subtitle: '',
     videoUrl: '',
     sub_category_id: '',
     banner_thumbnail: '',
@@ -25,9 +32,14 @@ const initialState = {
     isFree: false,
     price: '',
     objective: '',
+    duration: '',
+    image_public_id: '',
+    video_public_id: '',
+    language: '',
     tutor_id: '',
     course_difficulty: '',
-    courseType: '',
+    courseType: 'isPO',
+    career_category_id: '',
     description: '',
     uploadedCourse: {},
     hasError: false,
@@ -39,6 +51,7 @@ const initialState = {
     text: '',
     quiz: '',
     objective: '',
+    isUpdate: false,
     prerequisite: '',
     videoPath: '',
     images: '',
@@ -55,12 +68,28 @@ export default function(state = initialState, action) {
                 ...state,
                 sub_category_id: action.payload
             }
+        case IS_UPDATE:
+            return {
+                ...state,
+                isUpdate: action.payload
+            }
+        case SET_SUBTITLE:
+            return {
+                ...state,
+                subtitle: action.payload
+            }
+
+        case SET_CAREER_CATEGORY:
+            return {
+                ...state,
+                career_category_id: action.payload
+            }
 
 
         case SET_BANNER:
             return {
                 ...state,
-                banner: state.banner.concat(action.payload)
+                banner: action.payload
             }
 
 
@@ -110,6 +139,34 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 description: action.payload
+            }
+
+
+        case SET_DURATION:
+            return {
+                ...state,
+                duration: action.payload
+            }
+
+        case IMAGE_PUBLIC_ID:
+            return {
+                ...state,
+                image_public_id: action.payload
+            }
+
+
+
+        case VIDEO_PUBLIC_ID:
+            return {
+                ...state,
+                video_public_id: action.payload
+            }
+
+
+        case SET_LANGUAGE:
+            return {
+                ...state,
+                language: action.payload
             }
 
 

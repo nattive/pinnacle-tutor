@@ -2,20 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Statistic, Segment, Feed, Header } from 'semantic-ui-react'
 import { Container, Grid, Icon, Typography, Divider } from '@material-ui/core'
-import { getAllCourses } from "../../actions/courseAction"
 import { useEffect } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import avatar from '../../Assets/img/team/1.png'
-import { getActivities } from "../../actions/indexActon"
 import { Skeleton } from '@material-ui/lab'
 import DiscountTable from './DiscountTable'
 const DashboardView = (props) => {
-
-    useEffect(() => {
-        props.getActivities()
-        props.getAllCourses()
-    }, [])
-
     return (
         <Container>
             <Grid container>
@@ -97,7 +89,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    getAllCourses, getActivities
+    // getAllCourses, getActivities
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardView)
